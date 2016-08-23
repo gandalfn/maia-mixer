@@ -1,0 +1,56 @@
+[CCode (cheader_filename = "lv2/lv2plug.in/ns/ext/parameters/parameters.h")]
+namespace LV2.Parameters {
+    [CCode (cname = "LV2_PARAMETERS_URI")]
+    public const string URI;
+
+    [CCode (cname = "LV2_PARAMETERS__CompressorControls")]
+    public const string CompressorControls;
+    [CCode (cname = "LV2_PARAMETERS__ControlGroup")]
+    public const string ControlGroup;
+    [CCode (cname = "LV2_PARAMETERS__EnvelopeControls")]
+    public const string EnvelopeControls;
+    [CCode (cname = "LV2_PARAMETERS__FilterControls")]
+    public const string FilterControls;
+    [CCode (cname = "LV2_PARAMETERS__OscillatorControls")]
+    public const string OscillatorControls;
+    [CCode (cname = "LV2_PARAMETERS__amplitude")]
+    public const string amplitude;
+    [CCode (cname = "LV2_PARAMETERS__attack")]
+    public const string attack;
+    [CCode (cname = "LV2_PARAMETERS__bypass")]
+    public const string bypass;
+    [CCode (cname = "LV2_PARAMETERS__cutoffFrequency")]
+    public const string cutoffFrequency;
+    [CCode (cname = "LV2_PARAMETERS__decay")]
+    public const string decay;
+    [CCode (cname = "LV2_PARAMETERS__delay")]
+    public const string delay;
+    [CCode (cname = "LV2_PARAMETERS__dryLevel")]
+    public const string dryLevel;
+    [CCode (cname = "LV2_PARAMETERS__frequency")]
+    public const string frequency;
+    [CCode (cname = "LV2_PARAMETERS__gain")]
+    public const string gain;
+    [CCode (cname = "LV2_PARAMETERS__hold")]
+    public const string hold;
+    [CCode (cname = "LV2_PARAMETERS__pulseWidth")]
+    public const string pulseWidth;
+    [CCode (cname = "LV2_PARAMETERS__ratio")]
+    public const string ratio;
+    [CCode (cname = "LV2_PARAMETERS__release")]
+    public const string release;
+    [CCode (cname = "LV2_PARAMETERS__resonance")]
+    public const string resonance;
+    [CCode (cname = "LV2_PARAMETERS__sampleRate")]
+    public const string sampleRate;
+    [CCode (cname = "LV2_PARAMETERS__sustain")]
+    public const string sustain;
+    [CCode (cname = "LV2_PARAMETERS__threshold")]
+    public const string threshold;
+    [CCode (cname = "LV2_PARAMETERS__waveform")]
+    public const string waveform;
+    [CCode (cname = "LV2_PARAMETERS__wetDryRatio")]
+    public const string wetDryRatio;
+    [CCode (cname = "LV2_PARAMETERS__wetLevel")]
+    public const string wetLevel;
+}

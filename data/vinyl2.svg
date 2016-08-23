@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   id="svg2"
+   sodipodi:docname="vinyl2.svg"
+   viewBox="0 0 370 370"
+   sodipodi:version="0.32"
+   version="1.0"
+   inkscape:output_extension="org.inkscape.output.svg.inkscape"
+   inkscape:version="0.91 r13725"
+   width="370"
+   height="370">
+  <defs
+     id="defs4">
+    <linearGradient
+       id="linearGradient3153">
+      <stop
+         id="stop3155"
+         style="stop-color:#ffffff"
+         offset="0" />
+      <stop
+         id="stop3157"
+         style="stop-color:#ffffff;stop-opacity:0"
+         offset="1" />
+    </linearGradient>
+    <radialGradient
+       id="radialGradient3328"
+       xlink:href="#linearGradient3153"
+       gradientUnits="userSpaceOnUse"
+       cy="209.67"
+       cx="289.42999"
+       gradientTransform="matrix(-0.86959,0.86959,-1.9615,-1.9615,681.51,178.14)"
+       r="92.5"
+       inkscape:collect="always" />
+    <radialGradient
+       id="radialGradient3331"
+       xlink:href="#linearGradient3153"
+       gradientUnits="userSpaceOnUse"
+       cy="209.67"
+       cx="289.42999"
+       gradientTransform="matrix(0.86959,-0.86959,1.9615,1.9615,-281.51,221.86)"
+       r="92.5"
+       inkscape:collect="always" />
+    <radialGradient
+       id="radialGradient3349"
+       gradientUnits="userSpaceOnUse"
+       cy="192.84"
+       cx="199.28"
+       gradientTransform="matrix(0,2.8729,-1,0,392.84,-372.51)"
+       r="53.688"
+       inkscape:collect="always">
+      <stop
+         id="stop3265"
+         style="stop-color:#f7f7f7"
+         offset="0" />
+      <stop
+         id="stop3267"
+         style="stop-color:#e1e1e1"
+         offset="1" />
+    </radialGradient>
+    <radialGradient
+       id="radialGradient3352"
+       gradientUnits="userSpaceOnUse"
+       cy="192.84"
+       cx="199.28"
+       gradientTransform="matrix(0,2.7782,-0.82388,0,358.88,-353.65)"
+       r="68.844002"
+       inkscape:collect="always">
+      <stop
+         id="stop3275"
+         style="stop-color:#6c6c6c"
+         offset="0" />
+      <stop
+         id="stop3277"
+         style="stop-color:#3e3e3e"
+         offset="1" />
+    </radialGradient>
+  </defs>
+  <sodipodi:namedview
+     id="base"
+     inkscape:zoom="1.97"
+     height="400px"
+     borderopacity="1.0"
+     inkscape:current-layer="layer2"
+     inkscape:cx="185"
+     inkscape:window-y="30"
+     width="400px"
+     inkscape:guide-bbox="true"
+     showguides="true"
+     bordercolor="#666666"
+     inkscape:window-x="0"
+     guidetolerance="10"
+     objecttolerance="10"
+     inkscape:window-width="1920"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     pagecolor="#ffffff"
+     gridtolerance="10000"
+     inkscape:cy="185"
+     inkscape:document-units="px"
+     inkscape:window-height="1024"
+     showgrid="false"
+     fit-margin-top="0"
+     fit-margin-left="0"
+     fit-margin-right="0"
+     fit-margin-bottom="0"
+     inkscape:window-maximized="1" />
+  <g
+     id="layer2"
+     inkscape:label="draw"
+     inkscape:groupmode="layer"
+     transform="translate(-15,-15)">
+    <g
+       id="g4157">
+      <path
+         d="M 200,15 C 97.88,15 15,97.88 15,200 15,302.12 97.88,385 200,385 302.12,385 385,302.12 385,200 385,97.88 302.12,15 200,15 Z m 0,179.81 c 2.87,0 5.19,2.32 5.19,5.19 0,2.87 -2.32,5.19 -5.19,5.19 -2.87,0 -5.19,-2.32 -5.19,-5.19 0,-2.87 2.32,-5.19 5.19,-5.19 z"
+         style="color:#000000;fill:#080808;fill-rule:evenodd;fill-opacity:1"
+         id="path3191"
+         inkscape:connector-curvature="0" />
+      <path
+         d="m 200,132.66 c -37.16,0 -67.34,30.18 -67.34,67.34 0,37.16 30.18,67.34 67.34,67.34 37.16,0 67.34,-30.18 67.34,-67.34 0,-37.16 -30.18,-67.34 -67.34,-67.34 z m 0,62.9 c 2.45,0 4.44,1.99 4.44,4.44 0,2.45 -1.99,4.44 -4.44,4.44 -2.45,0 -4.44,-1.99 -4.44,-4.44 0,-2.45 1.99,-4.44 4.44,-4.44 z"
+         style="color:#000000;fill:#333333;fill-rule:evenodd"
+         id="path3271"
+         inkscape:connector-curvature="0" />
+      <path
+         d="M 200,15 C 97.88,15 15,97.88 15,200 15,302.12 97.88,385 200,385 302.12,385 385,302.12 385,200 385,97.88 302.12,15 200,15 Z m 0,3.594 c 100.15,0 181.44,81.257 181.44,181.41 0,100.153 -81.29,181.44 -181.44,181.44 -100.15,0 -181.44,-81.29 -181.44,-181.44 C 18.563,99.854 99.851,18.594 200,18.594 Z"
+         style="color:#000000;fill:#333333;fill-rule:evenodd;fill-opacity:1"
+         id="path3176"
+         inkscape:connector-curvature="0" />
+      <path
+         d="m 293.56,200 c 0,51.65 -41.91,93.59 -93.56,93.59 l 0,87.85 c 100.15,0 181.44,-81.29 181.44,-181.44 l -87.88,0 z"
+         style="color:#000000;fill:url(#radialGradient3331);fill-rule:evenodd"
+         id="path3151"
+         inkscape:connector-curvature="0" />
+      <path
+         d="m 106.44,200 c 0,-51.65 41.91,-93.59 93.56,-93.59 l 0,-87.848 c -100.15,0 -181.44,81.289 -181.44,181.44 l 87.88,0 z"
+         inkscape:transform-center-y="-90.71875"
+         style="color:#000000;fill:url(#radialGradient3328);fill-rule:evenodd"
+         inkscape:transform-center-x="90.71875"
+         id="path3193"
+         inkscape:connector-curvature="0" />
+      <path
+         d="m 248.68,151.32 c -26.87,-26.87 -70.49,-26.87 -97.36,0 -26.87,26.87 -26.87,70.49 0,97.36 26.87,26.87 70.49,26.87 97.36,0 26.87,-26.87 26.87,-70.49 0,-97.36 z m -2.14,2.14 c 25.68,25.69 25.68,67.39 0,93.08 -25.69,25.68 -67.39,25.68 -93.08,0 -25.68,-25.69 -25.68,-67.39 0,-93.08 25.69,-25.68 67.39,-25.68 93.08,0 z"
+         style="color:#000000;fill:url(#radialGradient3352);fill-rule:evenodd"
+         id="path3215"
+         inkscape:connector-curvature="0" />
+      <path
+         d="m 237.96,162.04 c -20.95,-20.96 -54.97,-20.96 -75.92,0 -20.96,20.95 -20.96,54.97 0,75.92 20.95,20.96 54.97,20.96 75.92,0 20.96,-20.95 20.96,-54.97 0,-75.92 z m -34.29,34.29 c 2.03,2.03 2.03,5.31 0,7.34 -2.03,2.03 -5.31,2.03 -7.34,0 -2.03,-2.03 -2.03,-5.31 0,-7.34 2.03,-2.02 5.31,-2.02 7.34,0 z"
+         style="color:#000000;fill:url(#radialGradient3349);fill-rule:evenodd"
+         id="path3223"
+         inkscape:connector-curvature="0" />
+      <path
+         d="M 243.95,156.05 C 236.89,148.99 228.54,144 219.67,141.04 l -1.24,3.72 c 8.31,2.76 16.12,7.46 22.74,14.07 8.05,8.06 13.25,17.89 15.6,28.24 l 3.82,-0.86 c -2.5,-11.05 -8.04,-21.56 -16.64,-30.16 z"
+         style="color:#000000;opacity:0.74256999;fill:#ffffff;fill-rule:evenodd"
+         id="path3230"
+         inkscape:connector-curvature="0" />
+      <path
+         d="m 142.61,190.26 -3.89,-0.67 c -3.23,19.18 2.54,39.58 17.33,54.36 14.74,14.75 35.07,20.53 54.2,17.35 l -0.64,-3.87 c -17.92,2.98 -36.96,-2.45 -50.78,-16.26 -13.85,-13.86 -19.25,-32.95 -16.22,-50.91 z"
+         style="color:#000000;opacity:0.74256999;fill:#ffffff;fill-rule:evenodd"
+         id="path3232"
+         inkscape:connector-curvature="0" />
+    </g>
+  </g>
+  <metadata
+     id="metadata29">
+    <rdf:RDF>
+      <cc:Work>
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <cc:license
+           rdf:resource="http://creativecommons.org/publicdomain/zero/1.0/" />
+        <dc:publisher>
+          <cc:Agent
+             rdf:about="http://openclipart.org/">
+            <dc:title>Openclipart</dc:title>
+          </cc:Agent>
+        </dc:publisher>
+        <dc:title></dc:title>
+        <dc:date>2007-10-30T17:35:05</dc:date>
+        <dc:description>Remember, it was a vinyl records before CD revolution!</dc:description>
+        <dc:source>https://openclipart.org/detail/7645/vinyl-records-by-benbois</dc:source>
+        <dc:creator>
+          <cc:Agent>
+            <dc:title>BenBois</dc:title>
+          </cc:Agent>
+        </dc:creator>
+        <dc:subject>
+          <rdf:Bag>
+            <rdf:li>disk</rdf:li>
+            <rdf:li>music</rdf:li>
+            <rdf:li>records</rdf:li>
+            <rdf:li>sound support</rdf:li>
+            <rdf:li>vinyl</rdf:li>
+          </rdf:Bag>
+        </dc:subject>
+      </cc:Work>
+      <cc:License
+         rdf:about="http://creativecommons.org/publicdomain/zero/1.0/">
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+      </cc:License>
+    </rdf:RDF>
+  </metadata>
+</svg>

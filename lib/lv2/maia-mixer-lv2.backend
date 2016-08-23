@@ -1,0 +1,8 @@
+[Extension]
+Name=lv2
+Description=Maia Mixer LV2 Backend
+Module=libmaia-mixer-lv2.so
+
+[Backend]
+Require=engine,
+Provide=mpeg,

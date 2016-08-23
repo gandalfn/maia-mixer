@@ -1,0 +1,232 @@
+Window.mixer {
+    border: 12;
+    size: 200, 200;
+
+    Grid.main {
+        row-spacing: 12;
+
+        Grid.grid_scope {
+            row-spacing: 5;
+            column-spacing: 5;
+            //xexpand: false;
+            //yexpand: false;
+
+            VuMeter.vumeter_left {
+                size: 8, 200;
+                xexpand: false;
+                xfill: false;
+                orientation: vertical;
+                fill-pattern: states (normal, #00FF00,
+                                      prelight, #FFFF00,
+                                      active, #FF0000);
+            }
+
+            Scope.scope_left {
+                column: 1;
+                size: 200,200;
+                line-width: 3;
+                stroke-pattern: #00F000;
+                trigger: true;
+                persistence: 0.2;
+                frames: 2048;
+                step: 16;
+                background-pattern: svg('<svg viewBox="0 0 400 400" >
+                                            <rect fill-opacity="1" ry="0" height="400" width="400" y="0" x="0"/>
+                                            <g transform="translate(0 -650)">
+                                              <g>
+                                               <rect fill-opacity="1" ry="28" height="400" width="400" y="650" x="0" fill="#002000"/>
+                                               <g stroke="#bfbb27" fill="none" stroke-width="0.1">
+                                                <path d="m0 850 400-1.4" stroke-width="0.8"/>
+                                                <g>
+                                                 <path d="m0 950 400-1.4"/>
+                                                 <path d="m0 1000 400-1.4"/>
+                                                 <path d="m0 900 400-1.4"/>
+                                                 <path d="m0 800 400-1.4"/>
+                                                 <path d="m0 750 400-1.4"/>
+                                                 <path d="m0 700 400-1.4"/>
+                                                </g>
+                                                <path d="m200 1050 1.4-400" stroke-width="0.8"/>
+                                                <g>
+                                                 <path d="m50 1050 1.4-400"/>
+                                                 <path d="m100 1050 1.4-400"/>
+                                                 <path d="m150 1050 1.4-400"/>
+                                                 <path d="m250 1050 1.4-400"/>
+                                                 <path d="m300 1050 1.4-400"/>
+                                                 <path d="m350 1050 1.4-400"/>
+                                                </g>
+                                               </g>
+                                              </g>
+                                            </g>
+                                         </svg>');
+            }
+
+            Scope.scope_right {
+                column: 2;
+                size: 200,200;
+                line-width: 3;
+                stroke-pattern: #00F000;
+                trigger: true;
+                persistence: 0.2;
+                frames: 2048;
+                step: 16;
+                background-pattern: svg('<svg viewBox="0 0 400 400" >
+                                            <rect fill-opacity="1" ry="0" height="400" width="400" y="0" x="0"/>
+                                            <g transform="translate(0 -650)">
+                                              <g>
+                                               <rect fill-opacity="1" ry="28" height="400" width="400" y="650" x="0" fill="#002000"/>
+                                               <g stroke="#bfbb27" fill="none" stroke-width="0.1">
+                                                <path d="m0 850 400-1.4" stroke-width="0.8"/>
+                                                <g>
+                                                 <path d="m0 950 400-1.4"/>
+                                                 <path d="m0 1000 400-1.4"/>
+                                                 <path d="m0 900 400-1.4"/>
+                                                 <path d="m0 800 400-1.4"/>
+                                                 <path d="m0 750 400-1.4"/>
+                                                 <path d="m0 700 400-1.4"/>
+                                                </g>
+                                                <path d="m200 1050 1.4-400" stroke-width="0.8"/>
+                                                <g>
+                                                 <path d="m50 1050 1.4-400"/>
+                                                 <path d="m100 1050 1.4-400"/>
+                                                 <path d="m150 1050 1.4-400"/>
+                                                 <path d="m250 1050 1.4-400"/>
+                                                 <path d="m300 1050 1.4-400"/>
+                                                 <path d="m350 1050 1.4-400"/>
+                                                </g>
+                                               </g>
+                                              </g>
+                                            </g>
+                                         </svg>');
+            }
+
+            VuMeter.vumeter_right {
+                column: 3;
+                xexpand: false;
+                xfill: false;
+                size: 8, 200;
+                orientation: vertical;
+                fill-pattern: states (normal, #00FF00,
+                                      prelight, #FFFF00,
+                                      active, #FF0000);
+            }
+        }
+
+        Grid.grid_player {
+            row: 1;
+            row-spacing: 5;
+            xfill: false;
+            yexpand: false;
+
+            TurntablePlayer.turntable_player {
+                row-spacing: 5;
+                column-spacing: 5;
+                vinyl-size: 600;
+                handle-size: 12;
+                stroke-pattern: states (normal, #969696,
+                                        active, #00FF00);
+                fill-pattern: states (normal, #494949,
+                                      active, #FFFFFF);
+                font-description: 'Digital Readout Thick Upright 18';
+                vinyl-pattern: image('data/vinyl2.svg');
+                play-icon-filename: /usr/share/icons/Tango/32x32/actions/media-playback-start.png;
+                pause-icon-filename: /usr/share/icons/Tango/32x32/actions/media-playback-pause.png;
+            }
+        }
+
+        Grid.grid_controls {
+            row: 2;
+            column-spacing: 5;
+
+            Label.bpm {
+                yfill: false;
+                alignment: left;
+                font-description: 'Digital Readout Thick Upright 18';
+                stroke-pattern: #00FF00;
+            }
+
+            Knob.volume {
+                column: 1;
+                border: 12;
+                xexpand: false;
+                xfill: false;
+                size: 64, 64;
+                fill-pattern: states (normal, #303030,
+                                      active, #FFFFFF);
+                stroke-pattern: states (normal, #969696,
+                                        active, #00FF00);
+            }
+
+            Label.label_volume {
+                column: 2;
+                yfill: false;
+                alignment: left;
+                text: 'Gain';
+                font-description: 'Digital Readout Thick Upright 18';
+                stroke-pattern: #00FF00;
+            }
+
+            Knob.low {
+                column: 3;
+                border: 12;
+                xexpand: false;
+                xfill: false;
+                size: 64, 64;
+                fill-pattern: states (normal, #303030,
+                                      active, #FFFFFF);
+                stroke-pattern: states (normal, #969696,
+                                        active, #00FF00);
+            }
+
+            Label.label_low {
+                column: 4;
+                yfill: false;
+                alignment: left;
+                text: 'Low';
+                font-description: 'Digital Readout Thick Upright 18';
+                stroke-pattern: #00FF00;
+            }
+
+            Knob.medium {
+                column: 5;
+                border: 12;
+                xexpand: false;
+                xfill: false;
+                size: 64, 64;
+                fill-pattern: states (normal, #303030,
+                                      active, #FFFFFF);
+                stroke-pattern: states (normal, #969696,
+                                        active, #00FF00);
+            }
+
+            Label.label_medium {
+                column: 6;
+                yfill: false;
+                alignment: left;
+                text: 'Medium';
+                font-description: 'Digital Readout Thick Upright 18';
+                stroke-pattern: #00FF00;
+            }
+
+            Knob.high {
+                column: 7;
+                border: 12;
+                xexpand: false;
+                xfill: false;
+                size: 64, 64;
+                fill-pattern: states (normal, #303030,
+                                      active, #FFFFFF);
+                stroke-pattern: states (normal, #969696,
+                                        active, #00FF00);
+            }
+
+            Label.label_high {
+                column: 8;
+                yfill: false;
+                alignment: left;
+                text: 'High';
+                font-description: 'Digital Readout Thick Upright 18';
+                stroke-pattern: #00FF00;
+            }
+        }
+    }
+}

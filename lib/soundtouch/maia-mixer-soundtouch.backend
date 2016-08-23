@@ -1,0 +1,8 @@
+[Extension]
+Name=soundtouch
+Description=Maia Mixer Soundtouch Backend
+Module=libmaia-mixer-soundtouch.so
+
+[Backend]
+Require=engine,
+Provide=mpeg,

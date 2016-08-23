@@ -1,0 +1,8 @@
+[Extension]
+Name=jack
+Description=Maia Mixer Jack Backend
+Module=libmaia-mixer-jack.so
+
+[Backend]
+Require=cairo,
+Provide=engine,

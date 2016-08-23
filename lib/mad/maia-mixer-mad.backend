@@ -1,0 +1,8 @@
+[Extension]
+Name=mad
+Description=Maia Mixer Mad Backend
+Module=libmaia-mixer-mad.so
+
+[Backend]
+Require=engine,
+Provide=mpeg,
