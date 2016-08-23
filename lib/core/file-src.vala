@@ -188,7 +188,7 @@ public class MaiaMixer.Core.FileSrc : Maia.Core.Object, Element
                             // A custom speed has been resample to occurate samplerate
                             if (m_Speed != 1.0)
                             {
-                                var speed = new Filters.Speed (m_Speed);
+                                var speed = new Filters.Speed (m_FrameRate, m_Speed);
                                 sample = speed.process (sample);
                             }
 
@@ -246,7 +246,7 @@ public class MaiaMixer.Core.FileSrc : Maia.Core.Object, Element
                         // A custom speed has been resample to occurate samplerate
                         if (m_Speed != 1.0)
                         {
-                            var speed = new Filters.Speed (m_Speed);
+                            var speed = new Filters.Speed (m_FrameRate, m_Speed);
                             sample = speed.process (sample);
                         }
 
@@ -300,7 +300,7 @@ public class MaiaMixer.Core.FileSrc : Maia.Core.Object, Element
                                     // A custom speed has been resample to occurate samplerate
                                     if (m_Speed != 1.0)
                                     {
-                                        var speed = new Filters.Speed (m_Speed);
+                                        var speed = new Filters.Speed (m_FrameRate, m_Speed);
                                         sample = speed.process (sample);
                                     }
 

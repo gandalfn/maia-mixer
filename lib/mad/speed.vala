@@ -30,9 +30,9 @@ public class MaiaMixer.Mad.Speed : MaiaMixer.Filters.Speed
     private global::Mad.Fixed m_Last[2];
 
     // methods
-    public Speed (double inRatio)
+    public Speed (uint inSampleRate, double inRatio)
     {
-        GLib.Object (ratio: inRatio);
+        base (inSampleRate, inRatio);
     }
 
     private int

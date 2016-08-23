@@ -20,12 +20,13 @@
 public class MaiaMixer.Filters.Speed : MaiaMixer.Filters.Filter
 {
     // accessors
+    public virtual uint sample_rate { get; construct; }
     public virtual double ratio { get; construct set; }
 
     // methods
-    public Speed (double inRatio)
+    public Speed (uint inSampleRate, double inRatio)
     {
-        GLib.Object (ratio: inRatio);
+        GLib.Object (sample_rate: inSampleRate, ratio: inRatio);
     }
 
     internal override Audio.Sample?

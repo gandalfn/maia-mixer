@@ -23,11 +23,13 @@ namespace MaiaMixer.Soundtouch
     public void backend_load ()
     {
         Maia.Core.Any.delegate (typeof (MaiaMixer.Filters.BPMDetect), typeof (MaiaMixer.Soundtouch.BPMDetect));
+        //Maia.Core.Any.delegate (typeof (MaiaMixer.Filters.Speed), typeof (MaiaMixer.Soundtouch.Speed));
     }
 
     [CCode (cname = "backend_unload")]
     public void backend_unload ()
     {
         Maia.Core.Any.undelegate (typeof (MaiaMixer.Filters.BPMDetect));
+        //Maia.Core.Any.undelegate (typeof (MaiaMixer.Filters.Speed));
     }
 }

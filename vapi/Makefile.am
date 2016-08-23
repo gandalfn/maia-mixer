@@ -12,6 +12,7 @@ noinst_DATA = \
     lv2-parameters.vapi \
     lv2-urid.vapi \
     lv2-uri-map.vapi \
+    soundtouch.vapi \
     soundtouch-bpm-detect.vapi
 
 EXTRA_DIST = \

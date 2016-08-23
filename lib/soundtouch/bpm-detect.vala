@@ -20,12 +20,12 @@
 public class MaiaMixer.Soundtouch.BPMDetect : MaiaMixer.Filters.BPMDetect
 {
     // properties
-    private global::Soundtouch.BPMDetect m_Detect;
+    private global::soundtouch.BPMDetect m_Detect;
 
     // accessors
     internal override float bpm {
         get {
-            return m_Detect.get_bpm ();
+            return m_Detect.bpm;
         }
     }
 
@@ -38,7 +38,7 @@ public class MaiaMixer.Soundtouch.BPMDetect : MaiaMixer.Filters.BPMDetect
     internal override void
     delegate_construct ()
     {
-        m_Detect = new global::Soundtouch.BPMDetect (1, (int)sample_rate);
+        m_Detect = new global::soundtouch.BPMDetect (1, (int)sample_rate);
     }
 
     internal override Audio.Sample?

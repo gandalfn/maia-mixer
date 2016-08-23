@@ -3,8 +3,11 @@ lib_LTLIBRARIES = libmaia-mixer-soundtouch.la
 libmaia_mixer_soundtouch_la_SOURCES = \
     init.vala \
     bpm-detect.vala \
+    speed.vala \
     soundtouch-bpm-detect.cpp \
-    soundtouch-bpm-detect.h
+    soundtouch-bpm-detect.h \
+    soundtouch.cpp \
+    soundtouch.h
 
 libmaia_mixer_soundtouch_la_VALAFLAGS = \
     --hide-internal \
@@ -14,6 +17,7 @@ libmaia_mixer_soundtouch_la_VALAFLAGS = \
     --vapidir=${top_srcdir}/vapi \
     --pkg=config \
     --pkg=soundtouch-bpm-detect \
+    --pkg=soundtouch \
     --vapidir=${top_builddir}/lib \
     --pkg=maia-mixer \
     $(MAIA_MIXER_VALAFLAGS)
