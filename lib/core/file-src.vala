@@ -64,7 +64,7 @@ public class MaiaMixer.Core.FileSrc : Maia.Core.Object, Element
 
     private class DecodeThread : GLib.Object
     {
-        const int BUFFER_SIZE = 1024 * 4;
+        const int BUFFER_SIZE = 1024 * 8;
         const long POSITION_SEND_DELAY = 400;
 
         public abstract class Action

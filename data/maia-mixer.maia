@@ -8,7 +8,7 @@ Window.mixer {
         Grid.grid_scope {
             row-spacing: 5;
             column-spacing: 5;
-            //xexpand: false;
+            xfill: false;
             //yexpand: false;
 
             VuMeter.vumeter_left {
@@ -23,7 +23,9 @@ Window.mixer {
 
             Scope.scope_left {
                 column: 1;
-                size: 200,200;
+                left-padding: 5;
+                right-padding: 12;
+                size: 300,200;
                 line-width: 3;
                 stroke-pattern: #00F000;
                 trigger: true;
@@ -62,7 +64,9 @@ Window.mixer {
 
             Scope.scope_right {
                 column: 2;
-                size: 200,200;
+                left-padding: 12;
+                right-padding: 5;
+                size: 300,200;
                 line-width: 3;
                 stroke-pattern: #00F000;
                 trigger: true;
