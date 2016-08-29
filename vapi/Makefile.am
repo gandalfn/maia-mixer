@@ -13,7 +13,10 @@ noinst_DATA = \
     lv2-urid.vapi \
     lv2-uri-map.vapi \
     soundtouch.vapi \
-    soundtouch-bpm-detect.vapi
+    soundtouch-bpm-detect.vapi \
+    libavutil.vapi \
+    libavformat.vapi \
+    libavcodec.vapi
 
 EXTRA_DIST = \
     $(noinst_DATA)
