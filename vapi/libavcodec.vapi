@@ -1,6 +1,9 @@
-namespace AV.Codec
+namespace Av.Codec
 {
-    [CCode (cname = "AVCodecID", cprefix = "AV_CODEC_ID_", cheader_filename = "avcodec.h")]
+    [CCode (cname = "avcodec_register_all")]
+    public void register_all ();
+
+    [CCode (cname = "enum AVCodecID", cprefix = "AV_CODEC_ID_", cheader_filename = "libavcodec/avcodec.h")]
     public enum ID
     {
         NONE,
@@ -424,7 +427,7 @@ namespace AV.Codec
         WRAPPED_AVFRAME
     }
 
-    [Flags, CCode (cname = "AVDiscard", cprefix = "AVDISCARD_", cheader_filename = "avcodec.h")]
+    [Flags, CCode (cname = "enum AVDiscard", cprefix = "AVDISCARD_", cheader_filename = "libavcodec/avcodec.h")]
     public enum Discard
     {
         NONE,
@@ -436,15 +439,15 @@ namespace AV.Codec
         ALL
     }
 
-    [Flags, CCode (cname = "int", cprefix = "AV_PKT_FLAG_", cheader_filename = "avcodec.h")]
+    [Flags, CCode (cname = "int", cprefix = "AV_PKT_FLAG_", cheader_filename = "libavcodec/avcodec.h")]
     public enum PktFlag
     {
         KEY,
         CORRUPT
     }
 
-    [CCode (cname = "AVPacketSideDataType", cprefix = "AV_PKT_DATA_", cheader_filename = "avcodec.h")]
-    enum PacketSideDataType
+    [CCode (cname = "enum AVPacketSideDataType", cprefix = "AV_PKT_DATA_", cheader_filename = "libavcodec/avcodec.h")]
+    public enum PacketSideDataType
     {
         PALETTE,
         NEW_EXTRADATA,
@@ -469,7 +472,7 @@ namespace AV.Codec
         MASTERING_DISPLAY_METADATA
     }
 
-    [SimpleType, CCode (cname = "AVPacketSideData", cheader_filename = "avcodec.h")]
+    [SimpleType, CCode (cname = "AVPacketSideData", cheader_filename = "libavcodec/avcodec.h")]
     public struct PacketSideData
     {
         [CCode (array_length_cname = "size")]
@@ -477,7 +480,7 @@ namespace AV.Codec
         public PacketSideDataType type;
     }
 
-    [SimpleType, CCode (cname = "AVPacket", cheader_filename = "avcodec.h")]
+    [SimpleType, CCode (cname = "AVPacket", cheader_filename = "libavcodec/avcodec.h")]
     public struct Packet
     {
         public int64   pts;
@@ -490,7 +493,7 @@ namespace AV.Codec
         public int64   pos;
     }
 
-    [CCode (cname = "int", cprefix = "FF_PROFILE_", cheader_filename = "avcodec.h")]
+    [CCode (cname = "int", cprefix = "FF_PROFILE_", cheader_filename = "libavcodec/avcodec.h")]
     public enum FFProfile
     {
         UNKNOWN,
@@ -567,19 +570,19 @@ namespace AV.Codec
         HEVC_REXT
     }
 
-    [SimpleType, CCode (cname = "AVProfile", cheader_filename = "avcodec.h")]
+    [SimpleType, CCode (cname = "AVProfile", cheader_filename = "libavcodec/avcodec.h")]
     public struct Profile
     {
         FFProfile profile;
         string name;
     }
 
-    [Flags, CCode (cname = "int", cprefix = "AV_CODEC_CAP_", cheader_filename = "avcodec.h")]
+    [Flags, CCode (cname = "int", cprefix = "AV_CODEC_CAP_", cheader_filename = "libavcodec/avcodec.h")]
     public enum Cap
     {
         DRAW_HORIZ_BAND,
         DR1,
-        TRUNCATED
+        TRUNCATED,
         DELAY,
         SMALL_LAST_FRAME,
         HWACCEL_VDPAU,
@@ -595,25 +598,73 @@ namespace AV.Codec
         LOSSLESS
     }
 
-    [Compact, CCode (cname = "AVCodec", cheader_filename = "avcodec.h")]
+    [CCode (cname = "enum AVFieldOrder", cprefix = "AV_FIELD_", cheader_filename = "libavcodec/avcodec.h")]
+    public enum FieldOrder
+    {
+        UNKNOWN,
+        PROGRESSIVE,
+        TT,
+        BB,
+        TB,
+        BT,
+    }
+
+    [Compact, CCode (cname = "AVCodecParameters", free_function = "avcodec_parameters_free", cheader_filename = "libavcodec/avcodec.h")]
+    public class Parameters
+    {
+        public Util.MediaType                   codec_type;
+        public ID                               codec_id;
+        public uint32                           codec_tag;
+        [CCode (array_length_cname = "extradata_size")]
+        public uint8[]                          extradata;
+        public int                              format;
+        public int64                            bit_rate;
+        public int                              bits_per_coded_sample;
+        public int                              bits_per_raw_sample;
+        public int                              profile;
+        public int                              level;
+        public int                              width;
+        public int                              height;
+        public Util.Rational                    sample_aspect_ratio;
+        public FieldOrder                       field_order;
+        public Util.ColorRange                  color_range;
+        public Util.ColorPrimaries              color_primaries;
+        public Util.ColorTransferCharacteristic color_trc;
+        public Util.ColorSpace                  color_space;
+        public Util.ChromaLocation              chroma_location;
+        public int                              video_delay;
+        public uint64                           channel_layout;
+        public int                              channels;
+        public int                              sample_rate;
+        public int                              block_align;
+        public int                              frame_size;
+        public int                              initial_padding;
+        public int                              trailing_padding;
+        public int                              seek_preroll;
+
+        [CCode (cname = "avcodec_parameters_alloc")]
+        public Parameters ();
+    }
+
+    [Compact, CCode (cname = "AVCodec", free_function = "", cheader_filename = "libavcodec/avcodec.h")]
     public class Codec
     {
-        public string name;
-        public string long_name;
-        public Media.Type type;
-        public ID id;
-        public Cap capabilities;
-        public Util.Rational supported_framerates;
+        public string               name;
+        public string               long_name;
+        public Util.MediaType       type;
+        public ID                   id;
+        public Cap                  capabilities;
+        public Util.Rational        supported_framerates;
         [CCode (array_length = false)]
-        public PixelFormat[] pix_fmts
+        public Util.PixelFormat[]   pix_fmts;
         [CCode (array_length = false)]
-        public int[] supported_samplerates;
+        public int[]                supported_samplerates;
         [CCode (array_length = false)]
-        public SampleFormat[] sample_fmts;
+        public Util.SampleFormat[]  sample_fmts;
         [CCode (array_length = false)]
-        public uint64[] channel_layouts;
-        public uint8 max_lowres;
+        public uint64[]             channel_layouts;
+        public uint8                max_lowres;
         [CCode (array_length = false)]
-        public Profile[] profiles;
+        public Profile[]            profiles;
     }
 }
