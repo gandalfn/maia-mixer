@@ -257,5 +257,7 @@ namespace Av.Format
         public static void close_input (ref unowned Context ctx);
         [CCode (cname = "av_dump_format")]
         public void dump_format (int index, string url, bool is_input);
+        [CCode (cname = "av_read_frame")]
+        public int read_frame (Codec.Packet packet);
     }
 }

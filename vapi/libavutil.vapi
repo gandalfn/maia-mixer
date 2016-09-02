@@ -1,5 +1,43 @@
 namespace Av.Util
 {
+    [CCode (cname = "int", cprefix = "AVERROR_", cheader_filename = "libavutil/error.h")]
+    public enum Error
+    {
+        BSF_NOT_FOUND,
+        BUG,
+        TOO_SMALL,
+        NOT_FOUND,
+        DEMUXER_NOT_FOUND,
+        ENCODER_NOT_FOUND,
+        EOF,
+        EXIT,
+        EXTERNAL,
+        FILTER_NOT_FOUND,
+        INVALIDDATA,
+        MUXER_NOT_FOUND,
+        OPTION_NOT_FOUND,
+        PATCHWELCOME,
+        PROTOCOL_NOT_FOUND,
+        STREAM_NOT_FOUND,
+        BUG2,
+        UNKNOWN,
+        EXPERIMENTAL,
+        INPUT_CHANGED,
+        OUTPUT_CHANGED,
+        HTTP_BAD_REQUEST,
+        HTTP_UNAUTHORIZED,
+        HTTP_FORBIDDEN,
+        HTTP_NOT_FOUND,
+        HTTP_OTHER_4XX,
+        HTTP_SERVER_ERROR;
+
+        [CCode (cname = "AVERROR")]
+        public static Error from_posix (int errno);
+
+        [CCode (cname = "AVUNERROR")]
+        public int to_posix ();
+    }
+
     [CCode (cheader_filename = "libavutil/mathematics.h")]
     namespace Mathematics
     {
@@ -235,7 +273,19 @@ namespace Av.Util
         S16P,
         S32P,
         FLTP,
-        DBLP
+        DBLP;
+
+        [CCode (cname = "av_get_sample_fmt_name")]
+        public unowned string to_string ();
+
+        [CCode (cname = "av_get_sample_fmt")]
+        public static SampleFormat from_string (string name);
+
+        [CCode (cname = "av_sample_fmt_is_planar")]
+        public bool is_planar ();
+
+        [CCode (cname = "av_get_bytes_per_sample")]
+        public int get_bytes_per_sample ();
     }
 
     [CCode (cname = "enum AVPixelFormat", cprefix = "AV_PIX_FMT_", cheader_filename = "libavutil/pixfmt.h")]
@@ -422,5 +472,214 @@ namespace Av.Util
         GBRAP12LE,
         GBRAP10BE,
         GBRAP10LE
+    }
+
+    [Compact, CCode (cname = "AVBuffer", free_function = "", cheader_filename = "libavutil/buffer.h")]
+    public class Buffer
+    {
+    }
+
+    [Compact, CCode (cname = "AVBufferRef", ref_function = "av_buffer_ref", unref_function = "av_util_buffer_ref_unref", cheader_filename = "libavutil/buffer.h")]
+    public class BufferRef
+    {
+        public Buffer buffer;
+        [CCode (array_length_cname = "size")]
+        public uint8[] data;
+
+        public int ref_count {
+            [CCode (cname = "av_buffer_get_ref_count")]
+            get;
+        }
+
+        public bool is_writable {
+            [CCode (cname = "av_buffer_is_writable")]
+            get;
+        }
+
+        [CCode (cname = "av_buffer_alloc")]
+        public BufferRef (int size);
+
+        [CCode (cname = "av_buffer_ref")]
+        public BufferRef @ref ();
+
+        [CCode (cname = "av_buffer_unref")]
+        static void _unref (ref unowned BufferRef buffer);
+        public void unref ()
+        {
+            _unref (ref this);
+        }
+    }
+
+    [CCode (cname = "enum AVPictureType", cprefix = "AV_PICTURE_TYPE_", cheader_filename = "libavutil/avutil.h")]
+    public enum PictureType
+    {
+        NONE,
+        I,
+        P,
+        B,
+        S,
+        SI,
+        SP,
+        BI
+    }
+
+    [CCode (cname = "enum AVFrameSideDataType", cprefix = "AV_FRAME_DATA_", cheader_filename = "libavutil/frame.h")]
+    public enum FrameSideDataType
+    {
+        PANSCAN,
+        A53_CC,
+        STEREO3D,
+        MATRIXENCODING,
+        DOWNMIX_INFO,
+        REPLAYGAIN,
+        DISPLAYMATRIX,
+        AFD,
+        MOTION_VECTORS,
+        SKIP_SAMPLES,
+        AUDIO_SERVICE_TYPE,
+        MASTERING_DISPLAY_METADATA,
+        GOP_TIMECODE
+    }
+
+    [Compact, CCode (cname = "AVFrameSideData", free_function = "", cheader_filename = "libavutil/frame.h")]
+    public class FrameSideData
+    {
+        public FrameSideDataType    type;
+        [CCode (array_length_cname = "size")]
+        public uint8[]              data;
+        public Dictionary           metadata;
+        public BufferRef            buf;
+
+        [CCode (cname = "av_frame_side_data_name")]
+        public unowned string to_string ();
+    }
+
+    [Compact, CCode (cname = "AVFrame", free_function = "av_frame_free", free_function_address_of = true, cheader_filename = "libavutil/frame.h")]
+    public class Frame
+    {
+        [Flags, CCode (cname = "int", cprefix = "AV_FRAME_FLAG_")]
+        public enum Flag
+        {
+            CORRUPT
+        }
+
+        [Flags, CCode (cname = "int", cprefix = "FF_DECODE_ERROR_")]
+        public enum DecodeError
+        {
+            INVALID_BITSTREAM,
+            MISSING_REFERENCE
+        }
+
+        public uint8            data[8];
+        public int              linesize[8];
+        [CCode (array_length = false)]
+        public uint8[,]         extended_data;
+        public int              width;
+        public int              height;
+        public int              nb_samples;
+        public int              format;
+        public bool             key_frame;
+        public PictureType      pict_type;
+        public Rational         sample_aspect_ratio;
+        public int64            pts;
+        public int64            pkt_pts;
+        public int64            pkt_dts;
+        public int              coded_picture_number;
+        public int              display_picture_number;
+        public int              quality;
+        public int              repeat_pict;
+        public int              interlaced_frame;
+        public int              top_field_first;
+        public bool             palette_has_changed;
+        public int64            reordered_opaque;
+        public BufferRef        buf[8];
+        [CCode (array_length_cname = "nb_extended_buf")]
+        public BufferRef[]      extended_buf;
+        [CCode (array_length_cname = "nb_side_data")]
+        public FrameSideData[]  side_data;
+        public Flag             flags;
+        public ColorPrimaries   color_primaries;
+        public ColorTransferCharacteristic color_trc;
+        public ChromaLocation   chroma_location;
+
+        public int64 best_effort_timestamp {
+            [CCode (cname = "av_frame_get_best_effort_timestamp")]
+            get;
+            [CCode (cname = "av_frame_set_best_effort_timestamp")]
+            set;
+        }
+
+        public int64 pkt_duration {
+            [CCode (cname = "av_frame_get_pkt_duration")]
+            get;
+            [CCode (cname = "av_frame_set_pkt_duration")]
+            set;
+        }
+
+        public int64 pkt_pos {
+            [CCode (cname = "av_frame_get_pkt_pos")]
+            get;
+            [CCode (cname = "av_frame_set_pkt_pos")]
+            set;
+        }
+
+        public int64 channel_layout {
+            [CCode (cname = "av_frame_get_channel_layout")]
+            get;
+            [CCode (cname = "av_frame_set_channel_layout")]
+            set;
+        }
+
+        public int channels {
+            [CCode (cname = "av_frame_get_channels")]
+            get;
+            [CCode (cname = "av_frame_set_channels")]
+            set;
+        }
+
+        public int sample_rate {
+            [CCode (cname = "av_frame_get_sample_rate")]
+            get;
+            [CCode (cname = "av_frame_set_sample_rate")]
+            set;
+        }
+
+        public unowned Dictionary metadata {
+            [CCode (cname = "av_frame_get_metadata")]
+            get;
+            [CCode (cname = "av_frame_set_metadata")]
+            set;
+        }
+
+        public DecodeError error_flags {
+            [CCode (cname = "av_frame_get_decode_error_flags")]
+            get;
+            [CCode (cname = "av_frame_set_decode_error_flags")]
+            set;
+        }
+
+        public int pkt_size {
+            [CCode (cname = "av_frame_get_pkt_size")]
+            get;
+            [CCode (cname = "av_frame_set_pkt_size")]
+            set;
+        }
+
+        public ColorSpace colorspace {
+            [CCode (cname = "av_frame_get_colorspace")]
+            get;
+            [CCode (cname = "av_frame_set_colorspace")]
+            set;
+        }
+
+        public ColorRange color_range {
+            [CCode (cname = "av_frame_get_color_range")]
+            get;
+            [CCode (cname = "av_frame_set_color_range")]
+            set;
+        }
+
+        [CCode (cname = "av_frame_alloc")]
+        public Frame ();
     }
 }
