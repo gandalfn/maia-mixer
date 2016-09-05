@@ -16,7 +16,8 @@ noinst_DATA = \
     soundtouch-bpm-detect.vapi \
     libavutil.vapi \
     libavformat.vapi \
-    libavcodec.vapi
+    libavcodec.vapi \
+    libswresample.vapi
 
 EXTRA_DIST = \
     $(noinst_DATA)

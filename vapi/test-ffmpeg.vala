@@ -81,6 +81,34 @@ main (string[] inArgs)
             int minutes = (int)(pos / 60.0);
             int seconds = (int)pos - (minutes * 60);
             print (@"frame channels: $(frame.channels) size: $(frame.nb_samples) sample_rate: $(frame.sample_rate) duration: $(duration) pos: $pos <=> $(minutes):$(seconds)\n");
+
+            var resample = new Sw.Resample.Context ();
+            Av.Util.Options.set_channel_layout (resample, "in_channel_layout", frame.channel_layout);
+            Av.Util.Options.set_channel_layout (resample, "out_channel_layout", frame.channel_layout);
+            Av.Util.Options.set_int (resample, "in_sample_rate", frame.sample_rate);
+            Av.Util.Options.set_int (resample, "out_sample_rate", 46000);
+            Av.Util.Options.set_sample_fmt (resample, "in_sample_fmt", frame.format);
+            Av.Util.Options.set_sample_fmt (resample, "out_sample_fmt", Av.Util.SampleFormat.FLTP);
+            resample.init ();
+
+            var outFrame = new Av.Util.Frame ();
+            outFrame.sample_rate = 46000;
+            outFrame.format = Av.Util.SampleFormat.FLTP;
+            outFrame.nb_samples = resample.get_out_samples (frame.nb_samples);
+            outFrame.channel_layout = frame.channel_layout;
+            ret = outFrame.get_buffer (false);
+            if (ret < 0)
+            {
+                error (@"error on get out frame buffer\n");
+            }
+
+            ret = resample.convert_frame (outFrame, frame);
+            if (ret < 0)
+            {
+                error ("Error on resample\n");
+            }
+
+            resample.close ();
         }
     }
 

@@ -523,6 +523,86 @@ namespace Av.Util
         BI
     }
 
+    [CCode (cheader_filename = "libavutil/channel_layout.h")]
+    namespace ChannelLayout
+    {
+        [Flags, CCode (cname = "gint64", cprefix = "AV_CH_F")]
+        public enum Flags
+        {
+            FRONT_LEFT,
+            FRONT_RIGHT,
+            FRONT_CENTER,
+            LOW_FREQUENCY,
+            BACK_LEFT,
+            BACK_RIGHT,
+            FRONT_LEFT_OF_CENTER,
+            FRONT_RIGHT_OF_CENTER,
+            BACK_CENTER,
+            SIDE_LEFT,
+            SIDE_RIGHT,
+            TOP_CENTER,
+            TOP_FRONT_LEFT,
+            TOP_FRONT_CENTER,
+            TOP_FRONT_RIGHT,
+            TOP_BACK_LEFT,
+            TOP_BACK_CENTER,
+            TOP_BACK_RIGHT,
+            STEREO_LEFT,
+            STEREO_RIGHT,
+            WIDE_LEFT,
+            WIDE_RIGHT,
+            SURROUND_DIRECT_LEFT,
+            SURROUND_DIRECT_RIGHT,
+            LOW_FREQUENCY_2,
+            LAYOUT_NATIVE
+        }
+
+        [CCode (cname = "gint64", cprefix = "AV_CH_LAYOUT_")]
+        public enum Mask
+        {
+            MONO,
+            STEREO,
+            2POINT1,
+            2_1,
+            SURROUND,
+            3POINT1,
+            4POINT0,
+            4POINT1,
+            2_2,
+            QUAD,
+            5POINT0,
+            5POINT1,
+            5POINT0_BACK,
+            5POINT1_BACK,
+            6POINT0,
+            6POINT0_FRONT,
+            HEXAGONAL,
+            6POINT1,
+            6POINT1_BACK,
+            6POINT1_FRONT,
+            7POINT0,
+            7POINT0_FRONT,
+            7POINT1,
+            7POINT1_WIDE,
+            7POINT1_WIDE_BACK,
+            OCTAGONAL,
+            HEXADECAGONAL,
+            STEREO_DOWNMIX
+        }
+
+        [CCode (cname = "enum AVMatrixEncoding", cprefix = "AV_MATRIX_ENCODING_")]
+        public enum MatrixEncoding
+        {
+            NONE,
+            DOLBY,
+            DPLII,
+            DPLIIX,
+            DPLIIZ,
+            DOLBYEX,
+            DOLBYHEADPHONE
+        }
+    }
+
     [CCode (cname = "enum AVFrameSideDataType", cprefix = "AV_FRAME_DATA_", cheader_filename = "libavutil/frame.h")]
     public enum FrameSideDataType
     {
@@ -577,7 +657,7 @@ namespace Av.Util
         public int              width;
         public int              height;
         public int              nb_samples;
-        public int              format;
+        public SampleFormat     format;
         public bool             key_frame;
         public PictureType      pict_type;
         public Rational         sample_aspect_ratio;
@@ -623,7 +703,7 @@ namespace Av.Util
             set;
         }
 
-        public int64 channel_layout {
+        public ChannelLayout.Mask channel_layout {
             [CCode (cname = "av_frame_get_channel_layout")]
             get;
             [CCode (cname = "av_frame_set_channel_layout")]
@@ -679,7 +759,139 @@ namespace Av.Util
             set;
         }
 
+        public bool is_writable {
+            [CCode (cname = "av_frame_is_writable")]
+            get;
+        }
+
         [CCode (cname = "av_frame_alloc")]
         public Frame ();
+
+        [CCode (cname = "av_frame_get_buffer")]
+        public int get_buffer (bool align);
+
+        [CCode (cname = "av_frame_make_writable")]
+        public int make_writable ();
+
+        [CCode (cname = "av_frame_get_plane_buffer")]
+        public unowned BufferRef get_plane_buffer (int plane);
+    }
+
+    [CCode (cheader_filename = "libavutil/opt.h")]
+    namespace Options
+    {
+        [Compact, CCode (cname = "AVOption")]
+        public class Option
+        {
+            [CCode (cname = "AVOptionType", cprefix = "AV_OPT_TYPE_")]
+            public enum Type
+            {
+                FLAGS,
+                INT,
+                INT64,
+                DOUBLE,
+                FLOAT,
+                STRING,
+                RATIONAL,
+                BINARY,
+                DICT,
+                CONST,
+                IMAGE_SIZE,
+                PIXEL_FMT,
+                SAMPLE_FMT,
+                VIDEO_RATE,
+                DURATION,
+                COLOR,
+                CHANNEL_LAYOUT,
+                BOOL
+            }
+
+            [Flags, CCode (cname = "int", cprefix = "AV_OPT_FLAG_")]
+            public enum Flags
+            {
+                ENCODING_PARAM,
+                DECODING_PARAM,
+                METADATA,
+                AUDIO_PARAM,
+                VIDEO_PARAM,
+                SUBTITLE_PARAM,
+                EXPORT,
+                READONLY,
+                FILTERING_PARAM
+            }
+
+            public string       name;
+            public string       help;
+            public int          offset;
+            public Type         type;
+            [CCode (cname = "default_val.i64")]
+            public int64        default_val_i64;
+            [CCode (cname = "default_val.dbl")]
+            public double       default_val_dbl;
+            [CCode (cname = "default_val.str")]
+            public string       default_val_str;
+            [CCode (cname = "default_val.q")]
+            public Rational     default_val_q;
+            public double       min;
+            public double       max;
+            public Flags        sflags;
+            public string       unit;
+        }
+
+        [Flags, CCode (cname = "int", cprefix = "AV_OPT_")]
+        public enum SearchFlags
+        {
+            SEARCH_CHILDREN,
+            SEARCH_FAKE_OBJ,
+            ALLOW_NULL,
+            MULTI_COMPONENT_RANGE
+        }
+
+        [CCode (cname = "av_opt_find")]
+        public static unowned Option? find(void *obj, string name, string? unit, Option.Flags opt_flags, SearchFlags search_flags);
+
+        [CCode (cname = "av_opt_set")]
+        public static int @set (void *obj, string name, string val, SearchFlags search_flags = (SearchFlags)0);
+        [CCode (cname = "av_opt_set_int")]
+        public static int set_int (void *obj, string name, int64 val, SearchFlags search_flags = (SearchFlags)0);
+        [CCode (cname = "av_opt_set_double")]
+        public static int set_double (void *obj, string name, double val, SearchFlags search_flags = (SearchFlags)0);
+        [CCode (cname = "av_opt_set_q")]
+        public static int set_q (void *obj, string name, Rational val, SearchFlags search_flags = (SearchFlags)0);
+        [CCode (cname = "av_opt_set_bin")]
+        public static int set_bin (void *obj, string name, uint8[] val, SearchFlags search_flags = (SearchFlags)0);
+        [CCode (cname = "av_opt_set_image_size")]
+        public static int set_image_size (void *obj, string name, int w, int h, SearchFlags search_flags = (SearchFlags)0);
+        [CCode (cname = "av_opt_set_pixel_fmt")]
+        public static int set_pixel_fmt (void *obj, string name, PixelFormat fmt, SearchFlags search_flags = (SearchFlags)0);
+        [CCode (cname = "av_opt_set_sample_fmt")]
+        public static int set_sample_fmt (void *obj, string name, SampleFormat fmt, SearchFlags search_flags = (SearchFlags)0);
+        [CCode (cname = "av_opt_set_video_rate")]
+        public static int set_video_rate (void *obj, string name, Rational val, SearchFlags search_flags = (SearchFlags)0);
+        [CCode (cname = "av_opt_set_channel_layout")]
+        public static int set_channel_layout (void *obj, string name, ChannelLayout.Mask ch_layout, SearchFlags search_flags = (SearchFlags)0);
+        [CCode (cname = "av_opt_set_dict_val")]
+        public static int set_dict_val(void *obj, string name, Dictionary val, SearchFlags search_flags = (SearchFlags)0);
+
+        [CCode (cname = "av_opt_get")]
+        public static int @get (void *obj, string name, SearchFlags search_flags, out string out_val);
+        [CCode (cname = "av_opt_get_int")]
+        public static int get_int (void *obj, string name, SearchFlags search_flags, out int64 out_val);
+        [CCode (cname = "av_opt_get_double")]
+        public static int get_double (void *obj, string name, SearchFlags search_flags, out double out_val);
+        [CCode (cname = "av_opt_get_q")]
+        public static int get_q (void *obj, string name, SearchFlags search_flags, out Rational out_val);
+        [CCode (cname = "av_opt_get_image_size")]
+        public static int get_image_size (void *obj, string name, SearchFlags search_flags, out int w_out, out int h_out);
+        [CCode (cname = "av_opt_get_pixel_fmt")]
+        public static int get_pixel_fmt (void *obj, string name, SearchFlags search_flags, out PixelFormat out_fmt);
+        [CCode (cname = "av_opt_get_sample_fmt")]
+        public static int get_sample_fmt (void *obj, string name, SearchFlags search_flags, out SampleFormat out_fmt);
+        [CCode (cname = "av_opt_get_video_rate")]
+        public static int get_video_rate (void *obj, string name, SearchFlags search_flags, out Rational out_val);
+        [CCode (cname = "av_opt_get_channel_layout")]
+        public static ChannelLayout.Mask get_channel_layout (void *obj, string name, SearchFlags search_flags, out int64 out_ch_layout);
+        [CCode (cname = "av_opt_get_dict_val")]
+        public static int get_dict_val (void *obj, string name, SearchFlags search_flags, out Dictionary out_val);
     }
 }
