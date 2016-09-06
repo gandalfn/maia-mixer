@@ -1,0 +1,8 @@
+[Extension]
+Name=ffmpeg
+Description=Maia Mixer FFMpeg Backend
+Module=libmaia-mixer-ffmpeg.so
+
+[Backend]
+Require=engine,
+Provide=mpeg,

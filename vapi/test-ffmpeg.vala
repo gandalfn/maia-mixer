@@ -19,6 +19,8 @@ main (string[] inArgs)
         error ("Cannot find stream information");
     }
 
+    long ctxDur = (long)((double)(ctx.duration * 1000.0) / (double)Av.Util.TIME_BASE);
+    print(@"context: $ctxDur\n");
     //ctx.dump_format (0, filename, false);
 
     unowned Av.Codec.Codec codec;
@@ -49,6 +51,9 @@ main (string[] inArgs)
     var frame = new Av.Util.Frame ();
     while (ctx.read_frame (packet) == 0)
     {
+        long offset = (long)((double)packet.pts * ctx.streams[numStream].time_base.q2d () * 1000.0);
+        long dur = (long)((double)packet.duration * ctx.streams[numStream].time_base.q2d () * 1000.0);
+        print(@"offset: $offset duration: $dur\n");
         if (packet.stream_index == numStream)
         {
             ret = codecCtx.send_packet (packet);
@@ -86,13 +91,13 @@ main (string[] inArgs)
             Av.Util.Options.set_channel_layout (resample, "in_channel_layout", frame.channel_layout);
             Av.Util.Options.set_channel_layout (resample, "out_channel_layout", frame.channel_layout);
             Av.Util.Options.set_int (resample, "in_sample_rate", frame.sample_rate);
-            Av.Util.Options.set_int (resample, "out_sample_rate", 46000);
+            Av.Util.Options.set_int (resample, "out_sample_rate", 44100);
             Av.Util.Options.set_sample_fmt (resample, "in_sample_fmt", frame.format);
             Av.Util.Options.set_sample_fmt (resample, "out_sample_fmt", Av.Util.SampleFormat.FLTP);
             resample.init ();
 
             var outFrame = new Av.Util.Frame ();
-            outFrame.sample_rate = 46000;
+            outFrame.sample_rate = 44100;
             outFrame.format = Av.Util.SampleFormat.FLTP;
             outFrame.nb_samples = resample.get_out_samples (frame.nb_samples);
             outFrame.channel_layout = frame.channel_layout;

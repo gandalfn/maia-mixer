@@ -97,6 +97,16 @@ AC_SUBST(MAIA_MIXER_MAD_CFLAGS)
 AC_SUBST(MAIA_MIXER_MAD_LIBS)
 
 dnl ****************************************************************************
+dnl Check for ffmpeg packages
+dnl ****************************************************************************
+PKG_CHECK_MODULES(MAIA_MIXER_FFMPEG, [libavutil >= 55.28.100
+                                      libavformat >= 57.41.100
+                                      libavcodec >= 57.48.101
+                                      libswresample >= 2.1.100])
+AC_SUBST(MAIA_MIXER_FFMPEG_CFLAGS)
+AC_SUBST(MAIA_MIXER_FFMPEG_LIBS)
+
+dnl ****************************************************************************
 dnl Check for mad packages
 dnl ****************************************************************************
 PKG_CHECK_MODULES(MAIA_MIXER_LV2, [lilv-0])
@@ -130,6 +140,7 @@ Makefile
 lib/Makefile
 lib/jack/Makefile
 lib/mad/Makefile
+lib/ffmpeg/Makefile
 lib/lv2/Makefile
 lib/soundtouch/Makefile
 src/Makefile

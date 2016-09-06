@@ -1,4 +1,4 @@
-SUBDIRS = . jack mad lv2 soundtouch
+SUBDIRS = . jack mad ffmpeg lv2 soundtouch
 
 maia-mixer.vapi: libmaia_mixer_la_vala.stamp
 

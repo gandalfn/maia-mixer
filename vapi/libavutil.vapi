@@ -1,5 +1,11 @@
 namespace Av.Util
 {
+    [CCode (cname = "AV_TIME_BASE")]
+    public const int64 TIME_BASE;
+
+    [CCode (cname = "AV_TIME_BASE_Q")]
+    public const Rational TIME_BASE_Q;
+
     [CCode (cname = "int", cprefix = "AVERROR_", cheader_filename = "libavutil/error.h")]
     public enum Error
     {
