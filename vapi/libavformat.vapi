@@ -144,6 +144,15 @@ namespace Av.Format
     {
     }
 
+    [Flags, CCode (cname = "int", cprefix = "AVSEEK_FLAG_", cheader_filename = "libavformat/avformat.h")]
+    public enum SeekFlag
+    {
+        BACKWARD,
+        BYTE,
+        ANY,
+        FRAME
+    }
+
     [Compact, CCode (cname = "AVFormatContext", free_function = "avformat_free_context", cheader_filename = "libavformat/avformat.h")]
     public class Context
     {
@@ -259,5 +268,7 @@ namespace Av.Format
         public void dump_format (int index, string url, bool is_input);
         [CCode (cname = "av_read_frame")]
         public int read_frame (Codec.Packet packet);
+        [CCode (cname = "av_seek_frame")]
+        public int seek_frame(int stream_index, int64 timestamp, SeekFlag flags);
     }
 }

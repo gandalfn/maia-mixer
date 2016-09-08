@@ -22,18 +22,59 @@ public class MaiaMixer.FFMpeg.Sample : MaiaMixer.Audio.Sample
     // methods
     public Sample (Av.Util.Frame inFrame)
     {
-        base (inFrame.channels, inFrame.nb_samples, inFrame.sample_rate);
+        int size = inFrame.format.get_buffer_size (null, inFrame.channels, inFrame.nb_samples, false);
+        unowned uint8[] leftData = (uint8[])inFrame.data[0];
+        unowned uint8[] rightData = (uint8[])inFrame.data[inFrame.channels > 1 ? 1 : 0];
 
-        unowned float[,] data = (float[,])inFrame.extended_data;
-        data.length[0] = inFrame.channels;
-        data.length[1] = inFrame.nb_samples;
-
-        for (int channel = 0; channel < int.min (2, inFrame.channels); ++channel)
+        int nbSamples = 0;
+        switch (inFrame.format)
         {
-            for (int cpt = 0; cpt < inFrame.nb_samples; ++cpt)
-            {
-                this[channel, cpt] = data[channel, cpt];
-            }
+            case Av.Util.Sample.Format.FLTP:
+                nbSamples = (int)(size / (sizeof (float) * inFrame.channels));
+                break;
+
+            case Av.Util.Sample.Format.S16P:
+                nbSamples = (int)(size / (sizeof (int16) * inFrame.channels));
+                break;
+
+            default:
+                critical (@"unsupported frame sample format $((int)inFrame.format)\n");
+                break;
+        }
+
+        base (inFrame.channels, nbSamples, inFrame.sample_rate);
+
+        switch (inFrame.format)
+        {
+            case Av.Util.Sample.Format.FLTP:
+                unowned float[] frameLeftData = (float[])leftData;
+                unowned float[] frameRightData = (float[])rightData;
+                for (int cpt = 0; cpt < length; ++cpt)
+                {
+                    this[0, cpt] = frameLeftData[cpt];
+                    if (channels > 1)
+                    {
+                        this[1, cpt] = frameRightData[cpt];
+                    }
+                }
+                break;
+
+            case Av.Util.Sample.Format.S16P:
+                unowned int16[] frameLeftData = (int16[])leftData;
+                unowned int16[] frameRightData = (int16[])rightData;
+                for (int cpt = 0; cpt < length; ++cpt)
+                {
+                    this[0, cpt] = (float)frameLeftData[cpt] / -(float)int16.MIN;
+                    if (channels > 1)
+                    {
+                        this[1, cpt] = (float)frameRightData[cpt] / -(float)int16.MIN;
+                    }
+                }
+                break;
+
+            default:
+                critical (@"unsupported frame sample format $((int)inFrame.format)\n");
+                break;
         }
     }
 }

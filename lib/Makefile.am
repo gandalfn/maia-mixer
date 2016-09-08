@@ -28,6 +28,7 @@ libmaia_mixer_la_SOURCES = \
     audio/sample.vala \
     audio/file.vala \
     audio/file-mpeg.vala \
+    audio/file-mp4.vala \
     filters/filter.vala \
     filters/resample.vala \
     filters/speed.vala \

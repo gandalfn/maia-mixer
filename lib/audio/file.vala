@@ -60,7 +60,7 @@ public abstract class MaiaMixer.Audio.File : Maia.Core.Object
     [CCode (notify = false)]
     public string filename { get; construct; }
 
-    public unowned Frame? current_frame {
+    public virtual unowned Frame? current_frame {
         get {
             return m_Current ?? first () as Frame;
         }
@@ -108,6 +108,10 @@ public abstract class MaiaMixer.Audio.File : Maia.Core.Object
                 {
                     case "audio/mpeg":
                         ret = new FileMpeg (inFilename);
+                        break;
+
+                    case "audio/mp4":
+                        ret = new FileMp4 (inFilename);
                         break;
 
                     case "audio/x-vorbis+ogg":

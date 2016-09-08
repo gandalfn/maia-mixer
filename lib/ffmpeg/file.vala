@@ -32,7 +32,7 @@ internal class MaiaMixer.FFMpeg.File : MaiaMixer.Audio.File
                 unowned File file = parent as File;
 
                 // check if file point under this frame
-                if (file != null && file.m_Frame.pkt_pts == m_Offset)
+                if (file != null)
                 {
                     ret = new Sample (file.m_Frame);
                 }
@@ -44,11 +44,12 @@ internal class MaiaMixer.FFMpeg.File : MaiaMixer.Audio.File
         // methods
         public Frame (Av.Codec.Packet inPacket, double inTimeBase)
         {
-            long offset = (long)((double)packet.pts * inTimeBase * 1000.0);
-            long duration = (long)((double)packet.duration * inTimeBase * 1000.0);
+            long offset = (long)((double)inPacket.pts * inTimeBase * 1000.0);
+            long duration = (long)((double)inPacket.duration * inTimeBase * 1000.0);
+
             GLib.Object (begin: offset, end: (offset + duration));
 
-            m_Offset = packet.pts;
+            m_Offset = inPacket.pts;
         }
     }
 
@@ -61,6 +62,20 @@ internal class MaiaMixer.FFMpeg.File : MaiaMixer.Audio.File
     private Av.Util.Frame             m_Frame;
 
     // accessors
+    internal override long position {
+        get {
+            return base.position;
+        }
+        set {
+            base.position = value;
+
+            if (m_Context != null)
+            {
+                m_Context.seek_frame (m_NumStream, (current_frame as Frame).m_Offset, Av.Format.SeekFlag.ANY);
+            }
+        }
+    }
+
     internal override long duration {
         get {
             long ret = 0;
@@ -83,7 +98,7 @@ internal class MaiaMixer.FFMpeg.File : MaiaMixer.Audio.File
             load_frames ();
 
             m_CodecContext = null;
-            m_Context.close ();
+            Av.Format.Context.close_input (ref m_Context);
             m_Context = null;
 
             if (init_context ())
@@ -92,6 +107,7 @@ internal class MaiaMixer.FFMpeg.File : MaiaMixer.Audio.File
                 m_Packet.init ();
 
                 m_Frame = new Av.Util.Frame ();
+                next_frame ();
             }
         }
     }
@@ -101,41 +117,45 @@ internal class MaiaMixer.FFMpeg.File : MaiaMixer.Audio.File
         m_Frame = null;
         m_Packet = null;
         m_CodecContext = null;
-        m_Context.close ();
+        Av.Format.Context.close_input (ref m_Context);
         m_Context = null;
     }
 
     private bool
     init_context ()
     {
-        int ret = Av.Format.Context.open_input (out m_Context, inFilename, null, null);
+        int ret = Av.Format.Context.open_input (out m_Context, filename, null, null);
         if (ret < 0)
         {
+            critical (@"Error on open input $(filename) $ret");
             return false;
         }
 
-        ret = ctx.find_stream_info (null);
+        ret = m_Context.find_stream_info (null);
         if (ret < 0)
         {
-            m_Context.close ();
+            critical (@"Error on get stream info $(filename)");
+            Av.Format.Context.close_input (ref m_Context);
             m_Context = null;
             return false;
         }
 
-        m_NumStream = ctx.find_best_stream (Av.Util.MediaType.AUDIO, -1, -1, out m_Codec, 0);
+        m_NumStream = m_Context.find_best_stream (Av.Util.MediaType.AUDIO, -1, -1, out m_Codec, 0);
         if (m_NumStream < 0)
         {
-            m_Context.close ();
+            critical (@"Error on get audio stream $(filename)");
+            Av.Format.Context.close_input (ref m_Context);
             m_Context = null;
             return false;
         }
 
-        var m_CodecContext = new Av.Codec.Context (codec);
+        m_CodecContext = new Av.Codec.Context (m_Codec);
         ret = m_CodecContext.set_parameters (m_Context.streams[m_NumStream].codecpar);
         if (ret < 0)
         {
+            critical (@"Error on set codec parameter $(filename)");
             m_CodecContext = null;
-            m_Context.close ();
+            Av.Format.Context.close_input (ref m_Context);
             m_Context = null;
             return false;
         }
@@ -143,8 +163,9 @@ internal class MaiaMixer.FFMpeg.File : MaiaMixer.Audio.File
         ret = m_CodecContext.open (m_Codec, null);
         if (ret < 0)
         {
+            critical (@"Error on open codec $(filename)");
             m_CodecContext = null;
-            m_Context.close ();
+            Av.Format.Context.close_input (ref m_Context);
             m_Context = null;
             return false;
         }

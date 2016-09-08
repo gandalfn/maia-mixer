@@ -266,32 +266,39 @@ namespace Av.Util
         BOTTOM
     }
 
-    [CCode (cname = "enum AVSampleFormat", cprefix = "AV_SAMPLE_FMT_", cheader_filename = "libavutil/samplefmt.h")]
-    public enum SampleFormat
+    [CCode (cheader_filename = "libavutil/samplefmt.h")]
+    namespace Sample
     {
-        NONE,
-        U8,
-        S16,
-        S32,
-        FLT,
-        DBL,
-        U8P,
-        S16P,
-        S32P,
-        FLTP,
-        DBLP;
+        [CCode (cname = "enum AVSampleFormat", cprefix = "AV_SAMPLE_FMT_")]
+        public enum Format
+        {
+            NONE,
+            U8,
+            S16,
+            S32,
+            FLT,
+            DBL,
+            U8P,
+            S16P,
+            S32P,
+            FLTP,
+            DBLP;
 
-        [CCode (cname = "av_get_sample_fmt_name")]
-        public unowned string to_string ();
+            [CCode (cname = "av_get_sample_fmt_name")]
+            public unowned string to_string ();
 
-        [CCode (cname = "av_get_sample_fmt")]
-        public static SampleFormat from_string (string name);
+            [CCode (cname = "av_get_sample_fmt")]
+            public static Format from_string (string name);
 
-        [CCode (cname = "av_sample_fmt_is_planar")]
-        public bool is_planar ();
+            [CCode (cname = "av_sample_fmt_is_planar")]
+            public bool is_planar ();
 
-        [CCode (cname = "av_get_bytes_per_sample")]
-        public int get_bytes_per_sample ();
+            [CCode (cname = "av_get_bytes_per_sample")]
+            public int get_bytes_per_sample ();
+
+            [CCode (instance_pos = 3.1, cname = "av_samples_get_buffer_size")]
+            public int get_buffer_size (out int? linesize, int nb_channels, int nb_samples, bool align);
+        }
     }
 
     [CCode (cname = "enum AVPixelFormat", cprefix = "AV_PIX_FMT_", cheader_filename = "libavutil/pixfmt.h")]
@@ -656,14 +663,14 @@ namespace Av.Util
             MISSING_REFERENCE
         }
 
-        public uint8            data[8];
+        public uint8*           data[8];
         public int              linesize[8];
         [CCode (array_length = false)]
         public uint8[,]         extended_data;
         public int              width;
         public int              height;
         public int              nb_samples;
-        public SampleFormat     format;
+        public Sample.Format    format;
         public bool             key_frame;
         public PictureType      pict_type;
         public Rational         sample_aspect_ratio;
@@ -871,7 +878,7 @@ namespace Av.Util
         [CCode (cname = "av_opt_set_pixel_fmt")]
         public static int set_pixel_fmt (void *obj, string name, PixelFormat fmt, SearchFlags search_flags = (SearchFlags)0);
         [CCode (cname = "av_opt_set_sample_fmt")]
-        public static int set_sample_fmt (void *obj, string name, SampleFormat fmt, SearchFlags search_flags = (SearchFlags)0);
+        public static int set_sample_fmt (void *obj, string name, Sample.Format fmt, SearchFlags search_flags = (SearchFlags)0);
         [CCode (cname = "av_opt_set_video_rate")]
         public static int set_video_rate (void *obj, string name, Rational val, SearchFlags search_flags = (SearchFlags)0);
         [CCode (cname = "av_opt_set_channel_layout")]
@@ -892,11 +899,11 @@ namespace Av.Util
         [CCode (cname = "av_opt_get_pixel_fmt")]
         public static int get_pixel_fmt (void *obj, string name, SearchFlags search_flags, out PixelFormat out_fmt);
         [CCode (cname = "av_opt_get_sample_fmt")]
-        public static int get_sample_fmt (void *obj, string name, SearchFlags search_flags, out SampleFormat out_fmt);
+        public static int get_sample_fmt (void *obj, string name, SearchFlags search_flags, out Sample.Format out_fmt);
         [CCode (cname = "av_opt_get_video_rate")]
         public static int get_video_rate (void *obj, string name, SearchFlags search_flags, out Rational out_val);
         [CCode (cname = "av_opt_get_channel_layout")]
-        public static ChannelLayout.Mask get_channel_layout (void *obj, string name, SearchFlags search_flags, out int64 out_ch_layout);
+        public static int get_channel_layout (void *obj, string name, SearchFlags search_flags, out ChannelLayout.Mask out_ch_layout);
         [CCode (cname = "av_opt_get_dict_val")]
         public static int get_dict_val (void *obj, string name, SearchFlags search_flags, out Dictionary out_val);
     }

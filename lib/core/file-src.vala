@@ -112,6 +112,7 @@ public class MaiaMixer.Core.FileSrc : Maia.Core.Object, Element
         private unowned Audio.File            m_File;
         private uint                          m_FrameRate;
         private double                        m_Speed = 1.0;
+        private GLib.Mutex                    m_Mutex = GLib.Mutex ();
         private Core.Buffer                   m_BufferLeft;
         private Core.Buffer                   m_BufferRight;
         private long                          m_Begin;
@@ -203,11 +204,14 @@ public class MaiaMixer.Core.FileSrc : Maia.Core.Object, Element
                                 // Get right channel else left channel if sample is mono
                                 unowned float[] right = sample.get_channel_data (sample.channels >= 2 ? 1 : 0);
 
-                                // TODO: we can have some sync problems because we writing under buffer in 2 times
-                                // Push left channel in buffer
-                                m_BufferLeft.push (left);
-                                // Push right channel in buffer
-                                m_BufferRight.push (right);
+                                m_Mutex.lock ();
+                                {
+                                    // Push left channel in buffer
+                                    m_BufferLeft.push (left);
+                                    // Push right channel in buffer
+                                    m_BufferRight.push (right);
+                                }
+                                m_Mutex.unlock ();
 
                                 // Get size available to write in buffer
                                 leftSizeAvailable = m_BufferLeft.write_available;
@@ -271,8 +275,8 @@ public class MaiaMixer.Core.FileSrc : Maia.Core.Object, Element
                             m_End = first.begin;
                             m_File.position = first.begin;
 
-                            leftSizeAvailable = nbSamples * size;
-                            rightSizeAvailable = nbSamples * size;
+                            leftSizeAvailable = (nbSamples - count) * size;
+                            rightSizeAvailable = (nbSamples - count) * size;
 
                             // Create buffers
                             unowned float[] left = (float[])GLib.Slice.alloc0 (leftSizeAvailable * sizeof (float));
@@ -350,19 +354,23 @@ public class MaiaMixer.Core.FileSrc : Maia.Core.Object, Element
                             // Loop since last frame size is available for writing in buffers
                             } while (m_File.next_frame () && size <= leftSizeAvailable &&  size <= rightSizeAvailable);
 
-                            // push revert buffers in queue
-                            unowned float[] buffer = (float[])leftPosition;
-                            buffer.length = left.length - (int)(leftPosition - (float*)left);
-                            if (buffer.length > 0)
+                            m_Mutex.lock ();
                             {
-                                m_BufferLeft.push (buffer);
+                                // push revert buffers in queue
+                                unowned float[] buffer = (float[])leftPosition;
+                                buffer.length = left.length - (int)(leftPosition - (float*)left);
+                                if (buffer.length > 0)
+                                {
+                                    m_BufferLeft.push (buffer);
+                                }
+                                buffer = (float[])rightPosition;
+                                buffer.length = right.length - (int)(rightPosition - (float*)right);
+                                if (buffer.length > 0)
+                                {
+                                    m_BufferRight.push (buffer);
+                                }
                             }
-                            buffer = (float[])rightPosition;
-                            buffer.length = right.length - (int)(rightPosition - (float*)right);
-                            if (buffer.length > 0)
-                            {
-                                m_BufferRight.push (buffer);
-                            }
+                            m_Mutex.unlock ();
 
                             // free buffers
                             GLib.Slice.free (left.length * sizeof (float), left);
@@ -537,21 +545,25 @@ public class MaiaMixer.Core.FileSrc : Maia.Core.Object, Element
             uint length = inSample.length;
             uint channels = inSample.channels;
 
-            if (m_BufferLeft.read_available >= length && m_BufferRight.read_available >= length && channels > 0)
+            m_Mutex.lock ();
             {
-                unowned float* data = (float*)inSample.data;
-                unowned float[] left = (float[])data;
-                left.length =(int)length;
-                m_BufferLeft.pop (ref left);
-
-                if (channels > 1)
+                if (m_BufferLeft.read_available >= length && m_BufferRight.read_available >= length && channels > 0)
                 {
-                    unowned float[] right = (float[])(data + length);
-                    right.length =(int)length;
+                    unowned float* data = (float*)inSample.data;
+                    unowned float[] left = (float[])data;
+                    left.length =(int)length;
+                    m_BufferLeft.pop (ref left);
 
-                    m_BufferRight.pop (ref right);
+                    if (channels > 1)
+                    {
+                        unowned float[] right = (float[])(data + length);
+                        right.length =(int)length;
+
+                        m_BufferRight.pop (ref right);
+                    }
                 }
             }
+            m_Mutex.unlock ();
         }
     }
 

@@ -672,7 +672,7 @@ namespace Av.Codec
         [CCode (array_length = false)]
         public int[]                supported_samplerates;
         [CCode (array_length = false)]
-        public Util.SampleFormat[]  sample_fmts;
+        public Util.Sample.Format[] sample_fmts;
         [CCode (array_length = false)]
         public uint64[]             channel_layouts;
         public uint8                max_lowres;
@@ -1001,7 +1001,7 @@ namespace Av.Codec
         public FieldOrder           field_order;
         public int                  sample_rate;
         public int                  channels;
-        public Util.SampleFormat    sample_fmt;
+        public Util.Sample.Format   sample_fmt;
         public int                  frame_size;
         public int                  frame_number;
         public int                  block_align;
@@ -1009,7 +1009,7 @@ namespace Av.Codec
         public uint64               channel_layout;
         public uint64               request_channel_layout;
         public AudioServiceType     audio_service_type;
-        public Util.SampleFormat    request_sample_fmt;
+        public Util.Sample.Format   request_sample_fmt;
         public int                  refcounted_frames;
         public float                qcompress;
         public float                qblur;

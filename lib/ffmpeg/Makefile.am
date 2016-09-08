@@ -2,7 +2,11 @@ lib_LTLIBRARIES = libmaia-mixer-ffmpeg.la
 
 libmaia_mixer_ffmpeg_la_SOURCES = \
     init.vala \
-    sample.vala
+    sample.vala \
+    file.vala \
+    file-mpeg.vala \
+    file-mp4.vala \
+    resample.vala
 
 libmaia_mixer_ffmpeg_la_VALAFLAGS = \
     --hide-internal \
@@ -11,6 +15,7 @@ libmaia_mixer_ffmpeg_la_VALAFLAGS = \
     --debug \
     --vapidir=${top_srcdir}/vapi \
     --pkg=config \
+    --pkg=posix \
     --pkg=libavutil \
     --pkg=libavformat \
     --pkg=libavcodec \

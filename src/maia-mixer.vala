@@ -5,10 +5,11 @@ main (string[] inArgs)
 
     Maia.Application.add_backends_path ("lib/jack");
     Maia.Application.add_backends_path ("lib/mad");
+    Maia.Application.add_backends_path ("lib/ffmpeg");
     Maia.Application.add_backends_path ("lib/lv2");
     Maia.Application.add_backends_path ("lib/soundtouch");
 
-    var application = new Maia.Application ("maia-mixer", 30, { "gtk", "jack", "mad", "lv2", "soundtouch" });
+    var application = new Maia.Application ("maia-mixer", 30, { "gtk", "jack", "mad", "ffmpeg", "lv2", "soundtouch" });
 
     Maia.Manifest.Element.register ("Knob", typeof (MaiaMixer.Widget.Knob));
     Maia.Manifest.Element.register ("Scope", typeof (MaiaMixer.Widget.Scope));
@@ -30,7 +31,7 @@ main (string[] inArgs)
         var filesrc = new MaiaMixer.Core.FileSrc ("filesrc", device.sample_rate);
         filesrc.filename = inArgs[1];
         //filesrc.speed = -1.0;
-        filesrc.position = filesrc.duration;
+        //filesrc.position = filesrc.duration;
 
 
         var eq = new MaiaMixer.Core.ThreeBandEq ("eq", device.sample_rate, device.buffer_size);
