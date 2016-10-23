@@ -33,6 +33,7 @@ public class MaiaMixer.LV2.ThreeBandEq : MaiaMixer.Filters.ThreeBandEq
     private bool                         m_Bypass;
 
     // accessors
+    [CCode (notify = false)]
     internal override double master {
         get {
             return m_Master;
@@ -42,6 +43,7 @@ public class MaiaMixer.LV2.ThreeBandEq : MaiaMixer.Filters.ThreeBandEq
         }
     }
 
+    [CCode (notify = false)]
     internal override double low {
         get {
             return m_Low;
@@ -51,6 +53,7 @@ public class MaiaMixer.LV2.ThreeBandEq : MaiaMixer.Filters.ThreeBandEq
         }
     }
 
+    [CCode (notify = false)]
     internal override double med {
         get {
             return m_Med;
@@ -60,6 +63,7 @@ public class MaiaMixer.LV2.ThreeBandEq : MaiaMixer.Filters.ThreeBandEq
         }
     }
 
+    [CCode (notify = false)]
     internal override double high {
         get {
             return m_High;

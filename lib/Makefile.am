@@ -13,6 +13,7 @@ lib_LTLIBRARIES = libmaia-mixer.la
 libmaia_mixer_la_SOURCES = \
     core/error.vala \
     core/buffer.vala \
+    core/sample-cache.vala \
     core/element.vala \
     core/engine.vala \
     core/file-src.vala \
@@ -37,7 +38,7 @@ libmaia_mixer_la_SOURCES = \
 
 libmaia_mixer_la_VALAFLAGS = \
     --hide-internal \
-    --target-glib=2.32 \
+    --target-glib=2.42 \
     --thread \
     --debug \
     --header=maia-mixer.h \

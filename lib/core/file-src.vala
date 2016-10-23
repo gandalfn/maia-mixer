@@ -64,7 +64,7 @@ public class MaiaMixer.Core.FileSrc : Maia.Core.Object, Element
 
     private class DecodeThread : GLib.Object
     {
-        const int BUFFER_SIZE = 1024 * 8;
+        const int BUFFER_SIZE = 1024 * 4;
         const long POSITION_SEND_DELAY = 400;
 
         public abstract class Action
@@ -115,6 +115,7 @@ public class MaiaMixer.Core.FileSrc : Maia.Core.Object, Element
         private GLib.Mutex                    m_Mutex = GLib.Mutex ();
         private Core.Buffer                   m_BufferLeft;
         private Core.Buffer                   m_BufferRight;
+        private Core.SampleCache              m_SampleCache;
         private long                          m_Begin;
         private long                          m_End;
         private long                          m_LastPositionSend;
@@ -146,6 +147,9 @@ public class MaiaMixer.Core.FileSrc : Maia.Core.Object, Element
             m_BufferLeft = new Core.Buffer (BUFFER_SIZE);
             m_BufferRight = new Core.Buffer (BUFFER_SIZE);
 
+            // Create sample cache
+            m_SampleCache = new Core.SampleCache (1000);
+
             // Create actions queue
             m_Actions = new Maia.Core.AsyncQueue<Action> ();
 
@@ -158,6 +162,41 @@ public class MaiaMixer.Core.FileSrc : Maia.Core.Object, Element
         {
             stop ();
             m_Thread.join ();
+        }
+
+        private void
+        fill_cache ()
+        {
+            unowned Audio.File.Frame? frame = m_File.current_frame;
+            if (frame != null)
+            {
+                if (m_Speed > 0.0 && frame != m_File.last ())
+                {
+                    bool added = false;
+                    do
+                    {
+                        // get sample from current frame
+                        Audio.Sample? sample = frame.sample;
+                        if (sample != null)
+                        {
+                            added = m_SampleCache.push_back (sample);
+                        }
+                    } while (m_File.next_frame () && added);
+                }
+                else if (m_Speed < 0.0 && frame != m_File.first ())
+                {
+                    bool added = false;
+                    do
+                    {
+                        // get sample from current frame
+                        Audio.Sample? sample = frame.sample;
+                        if (sample != null)
+                        {
+                            added = m_SampleCache.push_front (sample);
+                        }
+                    } while (added);
+                }
+            }
         }
 
         private void

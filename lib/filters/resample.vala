@@ -20,6 +20,7 @@
 public class MaiaMixer.Filters.Resample : MaiaMixer.Filters.Filter
 {
     // accessors
+    [CCode (notify = false)]
     public virtual int sample_rate { get; construct; }
 
     // methods

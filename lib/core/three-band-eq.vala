@@ -23,6 +23,7 @@ public class MaiaMixer.Core.ThreeBandEq : Maia.Core.Object, Element
     private Filters.ThreeBandEq m_Eq;
 
     // accessors
+    [CCode (notify = false)]
     public double master {
         get {
             return m_Eq.master;
@@ -33,6 +34,7 @@ public class MaiaMixer.Core.ThreeBandEq : Maia.Core.Object, Element
         }
     }
 
+    [CCode (notify = false)]
     public double low {
         get {
             return m_Eq.low;
@@ -43,6 +45,7 @@ public class MaiaMixer.Core.ThreeBandEq : Maia.Core.Object, Element
         }
     }
 
+    [CCode (notify = false)]
     public double med {
         get {
             return m_Eq.med;
@@ -53,6 +56,7 @@ public class MaiaMixer.Core.ThreeBandEq : Maia.Core.Object, Element
         }
     }
 
+    [CCode (notify = false)]
     public double high {
         get {
             return m_Eq.high;

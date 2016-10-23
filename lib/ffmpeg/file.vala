@@ -71,7 +71,27 @@ internal class MaiaMixer.FFMpeg.File : MaiaMixer.Audio.File
 
             if (m_Context != null)
             {
-                m_Context.seek_frame (m_NumStream, (current_frame as Frame).m_Offset, Av.Format.SeekFlag.ANY);
+                // In the worst case up to 29 MP3 frames need to be prefetched
+                // for accurate seeking:
+                // http://www.mars.org/mailman/public/mad-dev/2002-May/000634.html
+                unowned Frame? prefetchSeek = current_frame as Frame;
+                int count = 0;
+                for (int cpt = 0; cpt < 29; ++cpt)
+                {
+                    ++count;
+                    if (prefetchSeek.prev () != null)
+                    {
+                        prefetchSeek = prefetchSeek.prev () as Frame;
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
+
+                m_Context.seek_frame (m_NumStream, prefetchSeek.m_Offset, Av.Format.SeekFlag.ANY);
+
+                for (int cpt = 0; m_Frame.pkt_pts != (current_frame as Frame).m_Offset && decode_frame (); ++cpt);
             }
         }
     }
@@ -190,8 +210,8 @@ internal class MaiaMixer.FFMpeg.File : MaiaMixer.Audio.File
         }
     }
 
-    internal override bool
-    next_frame ()
+    private bool
+    decode_frame ()
     {
         bool ret = false;
 
@@ -217,6 +237,20 @@ internal class MaiaMixer.FFMpeg.File : MaiaMixer.Audio.File
                 break;
             }
 
+            ret = true;
+            break;
+        }
+
+        return ret;
+    }
+
+    internal override bool
+    next_frame ()
+    {
+        bool ret = false;
+
+        if (decode_frame ())
+        {
             if (m_Frame.pkt_pts != (current_frame as Frame).m_Offset)
             {
                 ret = base.next_frame ();
@@ -225,8 +259,6 @@ internal class MaiaMixer.FFMpeg.File : MaiaMixer.Audio.File
             {
                 ret = true;
             }
-
-            break;
         }
 
         return ret;

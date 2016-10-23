@@ -9,7 +9,7 @@ main (string[] inArgs)
     Maia.Application.add_backends_path ("lib/lv2");
     Maia.Application.add_backends_path ("lib/soundtouch");
 
-    var application = new Maia.Application ("maia-mixer", 30, { "gtk", "jack", "mad", "ffmpeg", "lv2", "soundtouch" });
+    var application = new Maia.Application ("maia-mixer", 60, { "gtk", "jack", "mad", "ffmpeg", "lv2", "soundtouch" });
 
     Maia.Manifest.Element.register ("Knob", typeof (MaiaMixer.Widget.Knob));
     Maia.Manifest.Element.register ("Scope", typeof (MaiaMixer.Widget.Scope));
@@ -28,7 +28,7 @@ main (string[] inArgs)
 
         device.add (port);
 
-        var filesrc = new MaiaMixer.Core.FileSrc ("filesrc", device.sample_rate);
+        MaiaMixer.Core.FileSrc filesrc = new MaiaMixer.Core.FileSrc ("filesrc", device.sample_rate);
         filesrc.filename = inArgs[1];
         //filesrc.speed = -1.0;
         //filesrc.position = filesrc.duration;

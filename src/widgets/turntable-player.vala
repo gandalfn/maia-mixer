@@ -31,6 +31,8 @@ public class MaiaMixer.Widget.TurntablePlayer : Maia.Grid
     private Maia.Graphic.Surface      m_VinylSurface = null;
     private Maia.Graphic.Surface      m_HandleSurface = null;
     private bool                      m_InMove = false;
+    private Maia.Graphic.Point        m_PrevMotion = Maia.Graphic.Point (0, 0);
+    private int64                     m_LastMotion;
     private Maia.Core.EventListener   m_PositionEventListerner = null;
     private long                      m_LastTurnTime;
     private double                    m_CurrentTurnPos = 0.0;
@@ -262,54 +264,142 @@ public class MaiaMixer.Widget.TurntablePlayer : Maia.Grid
         damage.post ();
     }
 
-    internal override void
-    on_gesture (Maia.Gesture.Notification inNotification)
+    internal override bool
+    on_button_press_event (uint inButton, Maia.Graphic.Point inPoint)
     {
-        if (inNotification.button == 1)
+        bool ret = base.on_button_press_event (inButton, inPoint);
+
+        if (ret && inButton == 1)
         {
-            switch (inNotification.gesture_type)
+            var vinyl_area = m_Vinyl.geometry.extents;
+            var vinyl_top_left = Maia.Graphic.Point (vinyl_area.origin.x + double.max(0, (vinyl_area.size.width - vinyl_size) / 2.0),
+                                                     vinyl_area.origin.y);
+            var vinyl_center = Maia.Graphic.Point (vinyl_top_left.x + (vinyl_size / 2.0), (vinyl_top_left.y + (vinyl_size / 2.0)));
+
+            double xlength = GLib.Math.fabs(inPoint.x - vinyl_center.x);
+            double ylength = GLib.Math.fabs(inPoint.y - vinyl_center.y);
+
+            if (GLib.Math.sqrt(xlength * xlength + ylength * ylength) <= (vinyl_size / 2.0))
             {
-                case Maia.Gesture.Type.PRESS:
-                    m_InMove = true;
-                    break;
-
-                case Maia.Gesture.Type.RELEASE:
-                    m_InMove = false;
-                    m_FileSrc.speed = m_SpeedButton.adjustment.value;
-                    break;
-
-                case Maia.Gesture.Type.VSCROLL:
-                    double delta = -inNotification.position.y / area.extents.size.height;
-
-                    if (GLib.Math.fabs (delta) > 0.05)
-                    {
-                        m_FileSrc.speed = 9.0 * delta;
-                    }
-                    break;
-
-                case Maia.Gesture.Type.HSCROLL:
-                    double delta = -inNotification.position.x / area.extents.size.width;
-
-                    if (m_Adjustment != null && GLib.Math.fabs (delta) > 0.01)
-                    {
-                        double offset = (m_Adjustment.upper - m_Adjustment.lower) * (delta / 100.0);
-                        double val = m_Adjustment.value + offset;
-                        if (val > m_Adjustment.upper)
-                        {
-                            m_Adjustment.value = m_Adjustment.upper;
-                        }
-                        else if (val < m_Adjustment.lower)
-                        {
-                            m_Adjustment.value = m_Adjustment.lower;
-                        }
-                        else
-                        {
-                            m_Adjustment.value = val;
-                        }
-                    }
-                    break;
+                m_InMove = true;
+                m_PrevMotion = inPoint;
+                m_LastMotion = GLib.get_monotonic_time ();
             }
         }
+
+        return ret;
+    }
+
+    internal override bool
+    on_button_release_event (uint inButton, Maia.Graphic.Point inPoint)
+    {
+        bool ret = base.on_button_press_event (inButton, inPoint);
+
+        if (inButton == 1 && m_InMove)
+        {
+            m_InMove = false;
+            m_FileSrc.speed = m_SpeedButton.adjustment.value;
+        }
+        return ret;
+    }
+
+    internal override bool
+    on_motion_event (Maia.Graphic.Point inPoint)
+    {
+        bool ret = base.on_motion_event (inPoint);
+        int64 now = GLib.get_monotonic_time ();
+
+        if (ret && m_InMove)
+        {
+            var vinyl_area = m_Vinyl.geometry.extents;
+            var vinyl_top_left = Maia.Graphic.Point (vinyl_area.origin.x + double.max(0, (vinyl_area.size.width - vinyl_size) / 2.0),
+                                                     vinyl_area.origin.y);
+            var vinyl_center = Maia.Graphic.Point (vinyl_top_left.x + (vinyl_size / 2.0), (vinyl_top_left.y + (vinyl_size / 2.0)));
+
+            double ax = inPoint.x - vinyl_center.x;
+            double ay = vinyl_center.y - inPoint.y;
+            double bx = m_PrevMotion.x - vinyl_center.x;
+            double by = vinyl_center.y - m_PrevMotion.y;
+
+            double angledelta = (GLib.Math.atan2(by, bx) - GLib.Math.atan2(ay, ax)) * 57.2957795;
+            if (angledelta > 180)
+            {
+                angledelta -= 360;
+            }
+            else if (angledelta < -180)
+            {
+                angledelta += 360;
+            }
+
+            var deltaTime = (now - m_LastMotion);
+            double coef = 2.77778;
+            double speed = (angledelta / deltaTime) * 1000 * coef;
+            if (deltaTime > 0 && GLib.Math.fabs (speed) > 0.1 && GLib.Math.fabs (speed) < 6.0)
+            {
+                print(@"speed: $(speed)\n");
+                m_FileSrc.speed = speed;
+            }
+
+            m_PrevMotion = inPoint;
+            m_LastMotion = now;
+        }
+
+        return ret;
+    }
+
+    internal override bool
+    on_scroll_event (Maia.Scroll inScroll, Maia.Graphic.Point inPoint)
+    {
+        bool ret = base.on_scroll_event (inScroll, inPoint);
+
+        switch (inScroll)
+        {
+            case Maia.Scroll.UP:
+                if (m_Adjustment != null)
+                {
+                    m_InMove = true;
+                    double offset = (m_Adjustment.upper - m_Adjustment.lower) * (1.0 / 100.0);
+                    double val = m_Adjustment.value + offset;
+                    if (val > m_Adjustment.upper)
+                    {
+                        m_Adjustment.value = m_Adjustment.upper;
+                    }
+                    else if (val < m_Adjustment.lower)
+                    {
+                        m_Adjustment.value = m_Adjustment.lower;
+                    }
+                    else
+                    {
+                        m_Adjustment.value = val;
+                    }
+                    m_InMove = false;
+                }
+                break;
+            case Maia.Scroll.DOWN:
+                if (m_Adjustment != null)
+                {
+                    m_InMove = true;
+
+                    double offset = (m_Adjustment.upper - m_Adjustment.lower) * (1.0 / 100.0);
+                    double val = m_Adjustment.value - offset;
+                    if (val > m_Adjustment.upper)
+                    {
+                        m_Adjustment.value = m_Adjustment.upper;
+                    }
+                    else if (val < m_Adjustment.lower)
+                    {
+                        m_Adjustment.value = m_Adjustment.lower;
+                    }
+                    else
+                    {
+                        m_Adjustment.value = val;
+                    }
+                    m_InMove = false;
+                }
+                break;
+        }
+
+        return ret;
     }
 
     private void

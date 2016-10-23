@@ -58,7 +58,7 @@ public class MaiaMixer.Mad.Speed : MaiaMixer.Filters.Speed
         {
             global::Mad.Fixed[] input = Sample.get_channel_data_fixed (inSample, channel);
             global::Mad.Fixed* old = (global::Mad.Fixed*)input;
-            global::Mad.Fixed* news = output + (channel * inSample.length * 6);
+            global::Mad.Fixed* news = output + (channel * inSample.length * 16);
             global::Mad.Fixed* begin = news;
             global::Mad.Fixed* end = old + input.length;
 
@@ -118,7 +118,7 @@ public class MaiaMixer.Mad.Speed : MaiaMixer.Filters.Speed
         if (ratio != 1.0 && ratio != 0.0)
         {
             // Create sample output
-            global::Mad.Fixed* output = GLib.Slice.alloc0 (sizeof (global::Mad.Fixed) * 2 * inSample.length * 6);
+            global::Mad.Fixed* output = GLib.Slice.alloc0 (sizeof (global::Mad.Fixed) * 2 * inSample.length * 16);
             int length = convert (inSample, output);
 
             if (length > 0)
@@ -127,7 +127,7 @@ public class MaiaMixer.Mad.Speed : MaiaMixer.Filters.Speed
 
                 for (int channel = 0; channel < int.min (2, (int)inSample.channels); ++channel)
                 {
-                    unowned global::Mad.Fixed[] data = (global::Mad.Fixed[])(output + (channel * inSample.length * 6));
+                    unowned global::Mad.Fixed[] data = (global::Mad.Fixed[])(output + (channel * inSample.length * 16));
                     data.length = length;
 
                     if (ratio > 0.0)

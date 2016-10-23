@@ -29,7 +29,7 @@ Window.mixer {
                 line-width: 3;
                 stroke-pattern: #00F000;
                 trigger: true;
-                persistence: 0.2;
+                persistence: 0.4;
                 frames: 2048;
                 step: 16;
                 background-pattern: svg('<svg viewBox="0 0 400 400" >
@@ -70,7 +70,7 @@ Window.mixer {
                 line-width: 3;
                 stroke-pattern: #00F000;
                 trigger: true;
-                persistence: 0.2;
+                persistence: 0.4;
                 frames: 2048;
                 step: 16;
                 background-pattern: svg('<svg viewBox="0 0 400 400" >

@@ -17,7 +17,7 @@ maia_mixer_SOURCES = \
 
 maia_mixer_VALAFLAGS = \
     $(MAIA_MIXER_VALAFLAGS) \
-    --target-glib=2.32 \
+    --target-glib=2.42 \
     --thread \
     --hide-internal \
     --debug \

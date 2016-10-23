@@ -6,7 +6,7 @@ libmaia_mixer_lv2_la_SOURCES = \
 
 libmaia_mixer_lv2_la_VALAFLAGS = \
     --hide-internal \
-    --target-glib=2.32 \
+    --target-glib=2.42 \
     --thread \
     --debug \
     --vapidir=${top_srcdir}/vapi \

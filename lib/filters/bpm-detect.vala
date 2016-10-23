@@ -20,6 +20,7 @@
 public class MaiaMixer.Filters.BPMDetect : MaiaMixer.Filters.Filter
 {
     // accessors
+    [CCode (notify = false)]
     public uint sample_rate  { get; construct; }
     public virtual float bpm {
         get {

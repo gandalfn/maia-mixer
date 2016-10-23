@@ -58,15 +58,6 @@ LT_PREREQ([2.2])
 LT_INIT([disable-static pic-only])
 
 dnl ****************************************************************************
-dnl Check for vala
-dnl ****************************************************************************
-vala_0_30=$(which valac-0.32)
-if test ! x"$vala_0_32" = x""; then
-    VALAC=$vala_0_32
-fi
-AM_PROG_VALAC($VALA_REQUIRED)
-
-dnl ****************************************************************************
 dnl Requirements
 dnl ****************************************************************************
 GSTREAMER_REQUIRED=1.8.0
@@ -119,6 +110,26 @@ dnl ****************************************************************************
 PKG_CHECK_MODULES(MAIA_MIXER_SOUNDTOUCH, [soundtouch])
 AC_SUBST(MAIA_MIXER_SOUNDTOUCH_CFLAGS)
 AC_SUBST(MAIA_MIXER_SOUNDTOUCH_LIBS)
+
+dnl ****************************************************************************
+dnl Check for bootstrap
+dnl ****************************************************************************
+AC_MSG_CHECKING([bootstrap])
+if test -e ${ac_pwd}/${srcdir}/bootstrap/build
+then
+    bootstrapdir="${ac_pwd}/${srcdir}/bootstrap/build"
+    export PKG_CONFIG_PATH="${bootstrapdir}/lib/pkgconfig"
+    VALAC="${bootstrapdir}/bin/valac"
+    AC_MSG_RESULT([$bootstrapdir])
+else
+    bootstrapdir=""
+    AC_MSG_RESULT([not found ! launch bootstrap.sh build])
+fi
+
+dnl ****************************************************************************
+dnl Check for vala
+dnl ****************************************************************************
+AM_PROG_VALAC($VALA_REQUIRED)
 
 dnl ****************************************************************************
 dnl Define path
